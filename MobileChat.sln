@@ -3,12 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32210.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileChat.Android", "src\Mobile\MobileChat.Android\MobileChat.Android.csproj", "{13C1AC91-1D08-4D23-8341-8F7A31480D7D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileChat.iOS", "src\Mobile\MobileChat.iOS\MobileChat.iOS.csproj", "{920F307A-42A0-45EF-ABE6-EA093D90F4A5}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MobileChat", "src\Mobile\MobileChat\MobileChat.csproj", "{108E7B6B-B928-4C52-8412-96C8E384BEED}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MobileChat.Web", "src\Web\MobileChat.Web.csproj", "{EF504EBA-7EB0-42DD-B71D-289D9383BF8A}"
 EndProject
 Global
