@@ -13,6 +13,12 @@ using MobileChatWeb.Hubs;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using MobileChatWeb.Database;
+using MobileChatWeb.Interfaces;
+using MobileChatWeb.Services;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MobileChatWeb
 {
@@ -46,6 +52,35 @@ namespace MobileChatWeb
             {
                 options.JsonSerializerOptions.WriteIndented = true;
             });
+
+            //api
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters.ValidateIssuerSigningKey = true;
+                options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("Secrets")["Jwt"]));
+                options.TokenValidationParameters.ValidateIssuer = false;
+                options.TokenValidationParameters.ValidateAudience = false;
+                options.TokenValidationParameters.ValidateLifetime = true;
+                options.TokenValidationParameters.ClockSkew = TimeSpan.FromSeconds(30);
+            });
+            services.AddAuthorization();
+            services.AddCors();
+
+            //database
+#if DEBUG
+            services.AddDbContext<DatabaseContext>(opts => opts.UseSqlServer(
+                Configuration.GetConnectionString("DefaultConnection")));
+#else
+            services.AddDbContext<DatabaseContext>(opts => opts.UseSqlServer(
+                Configuration.GetConnectionString("ProductionConnection")));
+#endif
+
+            //services
+            services.AddScoped<IUser, UserService>();
 
             services.AddSignalR();
         }
