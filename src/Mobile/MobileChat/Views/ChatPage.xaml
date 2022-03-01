@@ -123,48 +123,6 @@
                                                     IsVisible="{Binding SentState, Converter={StaticResource NullToBoolConverter}}"
                                                     Text="{x:Static helpers:IconFont.Check}" />
                                             </StackLayout>
-
-                                            <pancake:PancakeView
-                                                BackgroundColor="{Binding ImageBackgroundColor}"
-                                                CornerRadius="10"
-                                                IsVisible="{Binding AttachImg, Converter={StaticResource NullToBoolConverter}}">
-                                                <ffimageloading:CachedImage
-                                                    Margin="10"
-                                                    Aspect="AspectFit"
-                                                    BitmapOptimizations="False"
-                                                    DownsampleToViewSize="true"
-                                                    HeightRequest="100"
-                                                    HorizontalOptions="CenterAndExpand"
-                                                    RetryCount="0"
-                                                    RetryDelay="250"
-                                                    Source="{Binding AttachImg}" />
-                                                <pancake:PancakeView.GestureRecognizers>
-                                                    <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="TapGestureRecognizer_Tapped_2" />
-                                                </pancake:PancakeView.GestureRecognizers>
-                                            </pancake:PancakeView>
-
-                                            <pancake:PancakeView
-                                                BackgroundColor="Gray"
-                                                CornerRadius="10"
-                                                IsVisible="{Binding AttachAudio, Converter={StaticResource NullToBoolConverter}}">
-                                                <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
-                                                    <ffimageloading:CachedImage
-                                                        Aspect="AspectFit"
-                                                        HeightRequest="64"
-                                                        HorizontalOptions="Start"
-                                                        Source="audio_sample" />
-                                                    <Image
-                                                        Aspect="AspectFit"
-                                                        HeightRequest="30"
-                                                        HorizontalOptions="Start"
-                                                        Source="audio_play.png"
-                                                        WidthRequest="30">
-                                                        <Image.GestureRecognizers>
-                                                            <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="TapGestureRecognizer_Tapped_1" />
-                                                        </Image.GestureRecognizers>
-                                                    </Image>
-                                                </StackLayout>
-                                            </pancake:PancakeView>
                                         </StackLayout>
                                     </Frame>
 

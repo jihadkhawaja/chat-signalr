@@ -17,7 +17,6 @@
 		<PackageReference Include="CarouselView.FormsPlugin" Version="6.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.5" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-		<PackageReference Include="Plugin.AudioRecorder" Version="1.1.0" />
 		<PackageReference Include="Xam.Plugin.DeviceInfo" Version="4.1.1" />
 		<PackageReference Include="Xam.Shell.Badge" Version="1.0.11" />
 		<PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.0" />

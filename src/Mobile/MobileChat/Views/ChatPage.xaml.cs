@@ -1,7 +1,6 @@
 ﻿using MobileChat.Models;
 using MobileChat.Themes;
 using MobileChat.ViewModel;
-using Plugin.AudioRecorder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,8 +49,9 @@ namespace MobileChat.Views
                 }
             }
 
-            if (string.IsNullOrEmpty(App.chat.chatmessage.UserName))
-                await App.chat.CreateUsername();
+            //TODO
+            //if (string.IsNullOrEmpty(App.chat.chatmessage.UserName))
+            //    await App.chat.CreateUsername();
 
             await App.chat.Connect();
 
@@ -74,63 +74,6 @@ namespace MobileChat.Views
             ChatList.ScrollTo(v, ScrollToPosition.End, animated);
         }
 
-        private void TapGestureRecognizer_Tapped_2(object sender, EventArgs e)
-        {
-            var layout = (BindableObject)sender;
-            var item = (ChatMessage)layout.BindingContext;
-
-            if (item.AllowFullscreen)
-            {
-                imageShowcase.Source = item.AttachImg;
-                imageShowcaseHolder.IsVisible = true;
-            }
-        }
-
-        private AudioPlayer player;
-        private Image playImage;
-        private bool finishedPlay = true;
-
-        private async void TapGestureRecognizer_Tapped_1(object sender, EventArgs e)
-        {
-            var layout = (BindableObject)sender;
-            var item = (ChatMessage)layout.BindingContext;
-            var image = playImage = (Image)sender;
-
-            if (finishedPlay)
-            {
-                finishedPlay = false;
-                player = new AudioPlayer();
-                player.FinishedPlaying += Player_FinishedPlaying;
-
-                image.Source = "Stop_audio.png";
-                await PlayAudio(item.AttachAudio);
-            }
-            else
-            {
-                playImage.Source = "audio_play.png";
-                finishedPlay = true;
-                player.Pause();
-            }
-        }
-
-        private Task PlayAudio(string audioPath)
-        {
-            try
-            {
-                player.Play(audioPath);
-            }
-            catch (Exception ex)
-            {
-            }
-            return Task.CompletedTask;
-        }
-
-        private void Player_FinishedPlaying(object sender, EventArgs e)
-        {
-            playImage.Source = "audio_play.png";
-            finishedPlay = true;
-        }
-
         /// <summary>
         /// close fullscreen image
         /// </summary>
@@ -149,7 +92,7 @@ namespace MobileChat.Views
             //    //First Item has been hit
             //}
 
-            if ((ChatMessage)e.Item == App.chat.Messages[App.chat.Messages.Count - 1])
+            if ((Message)e.Item == App.chat.Messages[App.chat.Messages.Count - 1])
             {
                 //Last Item has been hit
                 App.chat.AutoScrollDown = true;

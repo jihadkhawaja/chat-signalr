@@ -23,37 +23,37 @@ namespace MobileChat.ViewModel
         }
 
         public int totalnewmessages = 0;
-        private ChatMessage _chatmessage = new ChatMessage();
-        private ChatInfo _chatinfo = new ChatInfo();
+        private Message _usermessage = new Message();
+        private User _user = new User();
         private string _message;
         private string _totalusers;
-        private ObservableCollection<ChatMessage> _messages;
+        private ObservableCollection<Message> _messages;
         private bool _isConnected;
         private bool _isLoading;
         private string _displayname;
 
-        public ChatMessage chatmessage
+        public Message chatmessage
         {
             get
             {
-                return _chatmessage;
+                return _usermessage;
             }
             set
             {
-                _chatmessage = value;
+                _usermessage = value;
                 OnPropertyChanged();
             }
         }
 
-        public ChatInfo chatinfo
+        public User User
         {
             get
             {
-                return _chatinfo;
+                return _user;
             }
             set
             {
-                _chatinfo = value;
+                _user = value;
                 OnPropertyChanged();
             }
         }
@@ -97,7 +97,7 @@ namespace MobileChat.ViewModel
             }
         }
 
-        public ObservableCollection<ChatMessage> Messages
+        public ObservableCollection<Message> Messages
         {
             get
             {
@@ -148,12 +148,12 @@ namespace MobileChat.ViewModel
         {
             try
             {
-                Messages = new ObservableCollection<ChatMessage>();
+                Messages = new ObservableCollection<Message>();
                 SendMessageCommand = new Command(async () => { await SendMessage(chatmessage); });
                 ConnectCommand = new Command(async () => await Connect());
                 DisconnectCommand = new Command(async () => await Disconnect());
 
-                chatinfo = new ChatInfo();
+                User = new User();
 
                 IsConnected = false;
 
@@ -161,21 +161,19 @@ namespace MobileChat.ViewModel
                  .WithUrl(App.hubConnectionURL)
                  .Build();
 
-                hubConnection.On<ChatInfo>("JoinChat", chatinfo =>
+                hubConnection.On<User>("JoinChat", o =>
                 {
-                    this.chatinfo = chatinfo;
-                    TotalUsers = $"{chatinfo.totalUsers} users in chat";
+                    TotalUsers = $"100 users in chat";
                 });
 
-                hubConnection.On<ChatInfo>("LeaveChat", chatinfo =>
+                hubConnection.On<User>("LeaveChat", o =>
                 {
-                    this.chatinfo = chatinfo;
-                    TotalUsers = $"{chatinfo.totalUsers} users in chat";
+                    TotalUsers = $"100 users in chat";
                 });
 
-                hubConnection.On<ChatMessage>("ReceiveMessage", chatmessage =>
+                hubConnection.On<Message>("ReceiveMessage", chatmessage =>
                 {
-                    if (chatmessage.DeviceId == CrossDeviceInfo.Current.Id)
+                    if (chatmessage.UserId == User.Id)
                         chatmessage.IsYourMessage = true;
                     else
                         chatmessage.IsYourMessage = false;
@@ -192,12 +190,12 @@ namespace MobileChat.ViewModel
                         MessagingCenter.Send<ChatViewModel>(this, "ScrollToEnd");
                 });
 
-                hubConnection.On<List<ChatMessage>>("ReceiveOldMessage", chatmessages =>
+                hubConnection.On<List<Message>>("ReceiveOldMessage", chatmessages =>
                 {
                     Messages.Clear();
-                    foreach (ChatMessage cm in chatmessages)
+                    foreach (Message cm in chatmessages)
                     {
-                        if (cm.DeviceId == CrossDeviceInfo.Current.Id)
+                        if (cm.UserId == User.Id)
                             cm.IsYourMessage = true;
                         else
                             cm.IsYourMessage = false;
@@ -236,14 +234,14 @@ namespace MobileChat.ViewModel
             IsLoading = false;
         }
 
-        private async Task SendMessage(ChatMessage chatmessage)
+        private async Task SendMessage(Message chatmessage)
         {
             IsLoading = true;
             try
             {
                 if (!string.IsNullOrEmpty(Message) && !string.IsNullOrWhiteSpace(Message))
                 {
-                    chatmessage.Message = Message;
+                    chatmessage.Content = Message;
                     await hubConnection.InvokeAsync("SendMessage", chatmessage);
                     Message = string.Empty;
                 }
@@ -269,8 +267,9 @@ namespace MobileChat.ViewModel
         {
             if (!string.IsNullOrEmpty(App.appSettings.chatUserName) && !overwrite)
             {
-                chatmessage.UserName = SavingManager.JsonSerialization.ReadFromJsonFile<AppSettings>("appsettings/user").chatUserName;
-                UserName = $"logged as {chatmessage.UserName}";
+                //TODO
+                //chatmessage.UserName = SavingManager.JsonSerialization.ReadFromJsonFile<AppSettings>("appsettings/user").chatUserName;
+                //UserName = $"logged as {chatmessage.UserName}";
                 return;
             }
 
@@ -284,8 +283,9 @@ namespace MobileChat.ViewModel
             else
                 App.appSettings.chatUserName = results;
 
-            chatmessage.UserName = App.appSettings.chatUserName;
-            UserName = $"Logged as {chatmessage.UserName}";
+            //TODO
+            //chatmessage.UserName = App.appSettings.chatUserName;
+            //UserName = $"Logged as {chatmessage.UserName}";
 
             SavingManager.JsonSerialization.WriteToJsonFile<AppSettings>("appsettings/user", App.appSettings);
         }
