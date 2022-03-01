@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using MobileChatWeb.Models;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 using MobileChat.Web.Models;
+using System;
+using System.Threading.Tasks;
 
 namespace MobileChatWeb.Hubs
 {

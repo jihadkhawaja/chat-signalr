@@ -1,8 +1,8 @@
-﻿using MobileChatWeb.Database;
+﻿using Microsoft.EntityFrameworkCore;
+using MobileChatWeb.Database;
 using MobileChatWeb.Helpers;
 using MobileChatWeb.Interfaces;
 using MobileChatWeb.Models;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;

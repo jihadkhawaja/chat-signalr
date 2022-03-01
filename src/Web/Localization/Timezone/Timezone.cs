@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace tools.Localization.Timezone
 {
@@ -36,14 +32,14 @@ namespace tools.Localization.Timezone
             }
             catch (TimeZoneNotFoundException)
             {
-                 Debug.WriteLine("Unable to find the {0} zone in the registry.",
-                                  zoneID);
+                Debug.WriteLine("Unable to find the {0} zone in the registry.",
+                                 zoneID);
                 throw;
             }
             catch (InvalidTimeZoneException)
             {
-                 Debug.WriteLine("Registry data on the {0} zone has been corrupted.",
-                                  zoneID);
+                Debug.WriteLine("Registry data on the {0} zone has been corrupted.",
+                                 zoneID);
                 throw;
             }
         }
