@@ -4,92 +4,42 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using MobileChatWeb.Models;
-using tools.Cache;
 using Microsoft.AspNetCore.SignalR;
+using MobileChat.Web.Models;
 
 namespace MobileChatWeb.Hubs
 {
     public class ChatHub : Hub
     {
-        public static ChatInfo chatInfo = new ChatInfo();
-
         public override Task OnConnectedAsync()
         {
-            chatInfo.totalUsers++;
             return base.OnConnectedAsync();
         }
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            chatInfo.totalUsers--;
             return base.OnDisconnectedAsync(exception);
         }
         public async Task JoinChat()
         {
             await ReceiveOldMessage();
-            await Clients.All.SendAsync("JoinChat", chatInfo);
+            await Clients.All.SendAsync("JoinChat");
         }
 
         public async Task LeaveChat()
         {
-            await Clients.All.SendAsync("LeaveChat", chatInfo);
+            await Clients.All.SendAsync("LeaveChat");
         }
 
-        public async Task SendMessage(ChatMessage chatMessage)
+        public async Task SendMessage(Message msg)
         {
-            await Clients.All.SendAsync("ReceiveMessage", chatMessage);
+            //send msg to all suers in the global chat room
+            await Clients.All.SendAsync("ReceiveMessage", msg);
 
-            try
-            {
-                List<ChatMessage> chatmessages = SavingManager.JsonSerialization.ReadFromJsonFile<List<ChatMessage>>("chat");
-
-                if (chatmessages == null)
-                    chatmessages = new List<ChatMessage>();
-
-                chatmessages.Add(chatMessage);
-
-                SavingManager.JsonSerialization.WriteToJsonFile<List<ChatMessage>>("chat", chatmessages);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine($"ERROR-C-SendMessage\n{e.Message}");
-            }
+            //save msg to db
         }
         public async Task ReceiveOldMessage()
         {
-            try
-            {
-                List<ChatMessage> chatmessages = SavingManager.JsonSerialization.ReadFromJsonFile<List<ChatMessage>>("chat");
-
-                if (chatmessages == null)
-                    chatmessages = new List<ChatMessage>();
-
-                if (chatmessages.Count == 0)
-                    return;
-
-                List<ChatMessage> chatmessagestosend = new List<ChatMessage>();
-
-                if(chatmessages.Count < 20)
-                {
-                    for (int i = chatmessages.Count - 1; i > 0; i--)
-                    {
-                        chatmessagestosend.Add(chatmessages[i]);
-                    }
-                }
-                else
-                {
-                    for (int i = chatmessages.Count - 1; i > chatmessages.Count - 20; i--)
-                    {
-                        chatmessagestosend.Add(chatmessages[i]);
-                    }
-                }
-
-                chatmessagestosend.Reverse();
-                await Clients.Caller.SendAsync("ReceiveOldMessage", chatmessagestosend);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine($"ERROR-C-JoinChat\n{e.Message}");
-            }
+            //TODO
         }
     }
 }
