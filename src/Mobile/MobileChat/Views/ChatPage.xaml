@@ -12,6 +12,7 @@
     xmlns:pancake="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
     Title="Chat"
     BackgroundColor="{DynamicResource PageBackgroundColorSecondary}"
+    NavigationPage.HasNavigationBar="True"
     mc:Ignorable="d">
 
     <ContentPage.Resources>
@@ -19,6 +20,17 @@
             <converters:InverseBoolConverter x:Key="InverseBool" />
         </ResourceDictionary>
     </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Clicked="ToolbarItem_Clicked">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="{StaticResource MaterialFontFamilySolid}"
+                    Glyph="{x:Static helpers:IconFont.Cog}"
+                    Size="Large" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
 
     <RelativeLayout BackgroundColor="{DynamicResource PageBackgroundColorSecondary}" FlowDirection="LeftToRight">
         <Grid

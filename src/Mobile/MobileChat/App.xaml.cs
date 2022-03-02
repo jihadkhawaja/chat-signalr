@@ -45,7 +45,7 @@ namespace MobileChat
 
             chat = new ChatViewModel();
 
-            MainPage = new AppShell();
+            MainPage = new NavigationPage(new ChatPage());
         }
 
         protected override async void OnStart()
