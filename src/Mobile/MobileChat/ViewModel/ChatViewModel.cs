@@ -267,9 +267,8 @@ namespace MobileChat.ViewModel
         {
             if (!string.IsNullOrEmpty(App.appSettings.chatUserName) && !overwrite)
             {
-                //TODO
-                //chatmessage.UserName = SavingManager.JsonSerialization.ReadFromJsonFile<AppSettings>("appsettings/user").chatUserName;
-                //UserName = $"logged as {chatmessage.UserName}";
+                User.DisplayName = SavingManager.JsonSerialization.ReadFromJsonFile<AppSettings>("appsettings/user").chatUserName;
+                UserName = $"logged as {User.DisplayName}";
                 return;
             }
 
@@ -282,10 +281,8 @@ namespace MobileChat.ViewModel
                 App.appSettings.chatUserName = CrossDeviceInfo.Current.Id.Substring(CrossDeviceInfo.Current.Id.Length - 5);
             else
                 App.appSettings.chatUserName = results;
-
-            //TODO
-            //chatmessage.UserName = App.appSettings.chatUserName;
-            //UserName = $"Logged as {chatmessage.UserName}";
+            User.DisplayName = App.appSettings.chatUserName;
+            UserName = $"Logged as {User.DisplayName}";
 
             SavingManager.JsonSerialization.WriteToJsonFile<AppSettings>("appsettings/user", App.appSettings);
         }
