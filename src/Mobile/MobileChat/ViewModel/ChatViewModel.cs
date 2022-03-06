@@ -208,7 +208,13 @@ namespace MobileChat.ViewModel
 
             IsLoading = false;
         }
+        public async Task Disconnect()
+        {
+            await hubConnection.InvokeAsync("LeaveChat");
+            await hubConnection.StopAsync();
 
+            IsConnected = false;
+        }
         private async Task SendMessage(Message chatmessage)
         {
             IsLoading = true;
@@ -228,14 +234,6 @@ namespace MobileChat.ViewModel
                 await Connect();
             }
             IsLoading = false;
-        }
-
-        public async Task Disconnect()
-        {
-            await hubConnection.InvokeAsync("LeaveChat");
-            await hubConnection.StopAsync();
-
-            IsConnected = false;
         }
 
         public async Task CreateUsername(bool overwrite = false)
