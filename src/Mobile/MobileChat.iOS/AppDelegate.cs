@@ -1,8 +1,5 @@
-﻿using CarouselView.FormsPlugin.iOS;
-using FFImageLoading.Forms.Platform;
-using Foundation;
+﻿using Foundation;
 using UIKit;
-using Xam.Shell.Badge.iOS;
 
 namespace MobileChat.iOS
 {
@@ -23,10 +20,6 @@ namespace MobileChat.iOS
         {
             global::Xamarin.Forms.Forms.Init();
             Xamarin.IQKeyboardManager.SharedManager.Enable = true;
-            CarouselViewRenderer.Init();
-            CachedImageRenderer.Init();
-            BottomBar.Init();
-            Plugin.InputKit.Platforms.iOS.Config.Init();
 
             LoadApplication(new App());
 

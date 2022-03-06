@@ -2,8 +2,6 @@
 using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
-using FFImageLoading.Forms.Platform;
-using Plugin.CurrentActivity;
 
 namespace MobileChat.Droid
 {
@@ -22,11 +20,6 @@ namespace MobileChat.Droid
 
             global::Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-            CarouselView.FormsPlugin.Droid.CarouselViewRenderer.Init();
-            CachedImageRenderer.Init(true);
-            CrossCurrentActivity.Current.Init(this, savedInstanceState);
-            Xam.Shell.Badge.Droid.BottomBar.Init();
-            Plugin.InputKit.Platforms.Droid.Config.Init(this, savedInstanceState);
 
             LoadApplication(new App());
         }

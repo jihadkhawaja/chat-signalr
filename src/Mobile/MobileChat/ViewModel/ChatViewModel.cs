@@ -1,7 +1,6 @@
 ﻿using MobileChat.Cache;
 using MobileChat.Models;
 using Microsoft.AspNetCore.SignalR.Client;
-using Plugin.DeviceInfo;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,16 +21,9 @@ namespace MobileChat.ViewModel
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public int totalnewmessages = 0;
-        private Message _usermessage = new Message();
-        private User _user = new User();
-        private string _message;
-        private string _totalusers;
-        private ObservableCollection<Message> _messages;
-        private bool _isConnected;
-        private bool _isLoading;
-        private string _displayname;
+        public int totalusers = 0;
 
+        private Message _usermessage = new Message();
         public Message chatmessage
         {
             get
@@ -44,7 +36,7 @@ namespace MobileChat.ViewModel
                 OnPropertyChanged();
             }
         }
-
+        private User _user = new User();
         public User User
         {
             get
@@ -57,7 +49,7 @@ namespace MobileChat.ViewModel
                 OnPropertyChanged();
             }
         }
-
+        private string _message;
         public string Message
         {
             get
@@ -70,20 +62,7 @@ namespace MobileChat.ViewModel
                 OnPropertyChanged();
             }
         }
-
-        public string UserName
-        {
-            get
-            {
-                return _displayname;
-            }
-            set
-            {
-                _displayname = value;
-                OnPropertyChanged();
-            }
-        }
-
+        private string _totalusers;
         public string TotalUsers
         {
             get
@@ -96,7 +75,7 @@ namespace MobileChat.ViewModel
                 OnPropertyChanged();
             }
         }
-
+        private ObservableCollection<Message> _messages;
         public ObservableCollection<Message> Messages
         {
             get
@@ -109,7 +88,7 @@ namespace MobileChat.ViewModel
                 OnPropertyChanged();
             }
         }
-
+        private bool _isLoading;
         public bool IsLoading
         {
             get
@@ -122,7 +101,7 @@ namespace MobileChat.ViewModel
                 OnPropertyChanged();
             }
         }
-
+        private bool _isConnected;
         public bool IsConnected
         {
             get
@@ -163,12 +142,14 @@ namespace MobileChat.ViewModel
 
                 hubConnection.On<User>("JoinChat", o =>
                 {
-                    TotalUsers = $"100 users in chat";
+                    totalusers++;
+                    TotalUsers = $"{totalusers} users in chat";
                 });
 
                 hubConnection.On<User>("LeaveChat", o =>
                 {
-                    TotalUsers = $"100 users in chat";
+                    totalusers--;
+                    TotalUsers = $"{totalusers} users in chat";
                 });
 
                 hubConnection.On<Message>("ReceiveMessage", chatmessage =>
@@ -179,12 +160,6 @@ namespace MobileChat.ViewModel
                         chatmessage.IsYourMessage = false;
 
                     Messages.Add(chatmessage);
-
-                    if (App.CurrentPage != "ChatPage")
-                    {
-                        totalnewmessages++;
-                        MessagingCenter.Send(this, "ChangeTextBadge", totalnewmessages.ToString());
-                    }
 
                     if (AutoScrollDown)
                         MessagingCenter.Send<ChatViewModel>(this, "ScrollToEnd");
@@ -267,8 +242,7 @@ namespace MobileChat.ViewModel
         {
             if (!string.IsNullOrEmpty(App.appSettings.chatUserName) && !overwrite)
             {
-                User.DisplayName = SavingManager.JsonSerialization.ReadFromJsonFile<AppSettings>("appsettings/user").chatUserName;
-                UserName = $"logged as {User.DisplayName}";
+                User.DisplayName = "Logged as " + SavingManager.JsonSerialization.ReadFromJsonFile<AppSettings>("appsettings /user").chatUserName;
                 return;
             }
 
@@ -278,19 +252,12 @@ namespace MobileChat.ViewModel
             if ((string.IsNullOrEmpty(results) || string.IsNullOrWhiteSpace(results)) && !string.IsNullOrEmpty(App.appSettings.chatUserName))
                 return;
             else if (string.IsNullOrEmpty(results) || string.IsNullOrWhiteSpace(results))
-                App.appSettings.chatUserName = CrossDeviceInfo.Current.Id.Substring(CrossDeviceInfo.Current.Id.Length - 5);
+                App.appSettings.chatUserName = "Anonymous";
             else
                 App.appSettings.chatUserName = results;
-            User.DisplayName = App.appSettings.chatUserName;
-            UserName = $"Logged as {User.DisplayName}";
+            User.DisplayName = "Logged as " + App.appSettings.chatUserName;
 
             SavingManager.JsonSerialization.WriteToJsonFile<AppSettings>("appsettings/user", App.appSettings);
-        }
-
-        public void ClearBadges()
-        {
-            totalnewmessages = 0;
-            MessagingCenter.Send(this, "RemoveBadge");
         }
     }
 }

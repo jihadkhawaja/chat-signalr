@@ -56,8 +56,6 @@ namespace MobileChat.Views
             await App.chat.Connect();
 
             ScrollToEnd(false);
-
-            App.chat.ClearBadges();
         }
 
         private void Subscribe()
@@ -82,7 +80,6 @@ namespace MobileChat.Views
         private void Button_Clicked(object sender, EventArgs e)
         {
             imageShowcaseHolder.IsVisible = false;
-            imageShowcase.Source = "";
         }
 
         private void ChatList_ItemAppearing(object sender, ItemVisibilityEventArgs e)

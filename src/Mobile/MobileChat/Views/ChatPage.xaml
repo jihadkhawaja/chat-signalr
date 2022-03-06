@@ -6,14 +6,17 @@
     xmlns:controls="clr-namespace:MobileChat.Controls"
     xmlns:converters="clr-namespace:MobileChat.Converters"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
     xmlns:helpers="clr-namespace:MobileChat.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:pancake="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+    xmlns:vm="clr-namespace:MobileChat.ViewModel"
     Title="Chat"
     BackgroundColor="{DynamicResource PageBackgroundColorSecondary}"
     NavigationPage.HasNavigationBar="True"
     mc:Ignorable="d">
+
+    <ContentPage.BindingContext>
+        <vm:ChatViewModel />
+    </ContentPage.BindingContext>
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -68,7 +71,7 @@
                     FlowDirection="LeftToRight"
                     FontSize="12"
                     HorizontalOptions="EndAndExpand"
-                    Text="{Binding UserName}"
+                    Text="{Binding User.DisplayName}"
                     TextColor="Gray"
                     VerticalOptions="Center">
                     <Label.GestureRecognizers>
@@ -229,7 +232,7 @@
                         Opacity="0.5"
                         VerticalOptions="Center"
                         WidthRequest="1" />
-                    <pancake:PancakeView IsVisible="false">
+                    <Frame IsVisible="false">
                         <Image
                             Aspect="AspectFit"
                             HeightRequest="20"
@@ -242,10 +245,10 @@
                                     Color="{DynamicResource PrimaryTextColor}" />
                             </Image.Source>
                         </Image>
-                        <pancake:PancakeView.GestureRecognizers>
+                        <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding AttachFileCommand}" />
-                        </pancake:PancakeView.GestureRecognizers>
-                    </pancake:PancakeView>
+                        </Frame.GestureRecognizers>
+                    </Frame>
                     <BoxView
                         BackgroundColor="LightGray"
                         HeightRequest="25"
@@ -255,7 +258,7 @@
                         Opacity="0.5"
                         VerticalOptions="Center"
                         WidthRequest="1" />
-                    <pancake:PancakeView IsVisible="false">
+                    <Frame IsVisible="false">
                         <Image
                             x:Name="RecordBtn"
                             Aspect="AspectFit"
@@ -269,10 +272,10 @@
                                     Color="{DynamicResource PrimaryTextColor}" />
                             </Image.Source>
                         </Image>
-                        <pancake:PancakeView.GestureRecognizers>
+                        <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding RecordFileCommand}" NumberOfTapsRequired="1" />
-                        </pancake:PancakeView.GestureRecognizers>
-                    </pancake:PancakeView>
+                        </Frame.GestureRecognizers>
+                    </Frame>
                 </StackLayout>
             </Grid>
         </Grid>
@@ -285,14 +288,6 @@
                                                                    Property=Height}"
             RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,
                                                                   Property=Width}">
-            <ffimageloading:CachedImage
-                x:Name="imageShowcase"
-                Aspect="AspectFit"
-                BitmapOptimizations="False"
-                DownsampleToViewSize="true"
-                HorizontalOptions="FillAndExpand"
-                RetryCount="0"
-                RetryDelay="250" />
             <Grid
                 Padding="10"
                 HeightRequest="25"
