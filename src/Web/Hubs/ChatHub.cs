@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.SignalR;
+using MobileChat.Web.Interfaces;
 using MobileChat.Web.Models;
 using System;
 using System.Threading.Tasks;
@@ -7,6 +9,10 @@ namespace MobileChat.Web.Hubs
 {
     public class ChatHub : Hub
     {
+        [Inject]
+        private IUser userService { get; set; }
+        [Inject]
+        private IMessage messageService { get; set; }
         public override Task OnConnectedAsync()
         {
             return base.OnConnectedAsync();
