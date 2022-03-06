@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MobileChatWeb.Models;
+using MobileChat.Web.Models;
 
-namespace MobileChatWeb.Database
+namespace MobileChat.Web.Database
 {
     public class DatabaseContext : DbContext
     {
@@ -10,5 +10,6 @@ namespace MobileChatWeb.Database
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Message> Messages { get; set; }
     }
 }

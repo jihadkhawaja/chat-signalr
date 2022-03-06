@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
-namespace MobileChatWeb.Pages
+namespace MobileChat.Web.Pages
 {
     public class IndexModel : PageModel
     {

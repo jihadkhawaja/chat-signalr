@@ -8,14 +8,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using MobileChatWeb.Database;
-using MobileChatWeb.Hubs;
-using MobileChatWeb.Interfaces;
-using MobileChatWeb.Services;
+using MobileChat.Web.Database;
+using MobileChat.Web.Hubs;
+using MobileChat.Web.Interfaces;
+using MobileChat.Web.Services;
 using System;
 using System.Text;
 
-namespace MobileChatWeb
+namespace MobileChat.Web
 {
     public class Startup
     {
@@ -76,6 +76,7 @@ namespace MobileChatWeb
 
             //services
             services.AddScoped<IUser, UserService>();
+            services.AddScoped<IMessage, MessageService>();
 
             services.AddSignalR();
         }

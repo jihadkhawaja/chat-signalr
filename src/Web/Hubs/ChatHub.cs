@@ -3,7 +3,7 @@ using MobileChat.Web.Models;
 using System;
 using System.Threading.Tasks;
 
-namespace MobileChatWeb.Hubs
+namespace MobileChat.Web.Hubs
 {
     public class ChatHub : Hub
     {
@@ -17,7 +17,7 @@ namespace MobileChatWeb.Hubs
         }
         public async Task JoinChat()
         {
-            await ReceiveOldMessage();
+            await ReceiveMessageHistory();
             await Clients.All.SendAsync("JoinChat");
         }
 
@@ -33,7 +33,7 @@ namespace MobileChatWeb.Hubs
 
             //save msg to db
         }
-        public async Task ReceiveOldMessage()
+        public async Task ReceiveMessageHistory()
         {
             //TODO
         }

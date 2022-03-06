@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace MobileChatWeb.Interfaces
+namespace MobileChat.Web.Interfaces
 {
     public interface IFirebaseNotification
     {

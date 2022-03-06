@@ -1,34 +1,28 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MobileChatWeb.Database;
-using MobileChatWeb.Helpers;
-using MobileChatWeb.Interfaces;
-using MobileChatWeb.Models;
+using MobileChat.Web.Database;
+using MobileChat.Web.Helpers;
+using MobileChat.Web.Interfaces;
+using MobileChat.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace MobileChatWeb.Services
+namespace MobileChat.Web.Services
 {
     public class UserService : IUser
     {
         private readonly DatabaseContext context;
-        public static User User { get; private set; }
         public UserService(DatabaseContext context)
         {
             this.context = context;
-        }
-        public DatabaseContext Context()
-        {
-            return context;
         }
         public Task<bool> Create(User entry)
         {
             try
             {
                 entry.DateCreated = DateTime.UtcNow;
-                User = entry;
                 context.Users.Add(entry);
                 context.SaveChanges();
             }
@@ -147,7 +141,6 @@ namespace MobileChatWeb.Services
 
                 if (CryptographyHelper.ComparePassword(password, dbentry.Password))
                 {
-                    User = dbentry;
                     return Task.FromResult(true);
                 }
 
@@ -158,10 +151,6 @@ namespace MobileChatWeb.Services
                 Console.WriteLine(e.Message);
                 return Task.FromResult(false);
             }
-        }
-        public User GetUser()
-        {
-            return User;
         }
     }
 }

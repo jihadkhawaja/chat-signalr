@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 
-namespace MobileChatWeb.Helpers
+namespace MobileChat.Web.Helpers
 {
     public static class CryptographyHelper
     {

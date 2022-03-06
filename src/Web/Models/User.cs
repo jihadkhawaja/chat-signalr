@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace MobileChatWeb.Models
+namespace MobileChat.Web.Models
 {
     public class User
     {
@@ -20,8 +20,8 @@ namespace MobileChatWeb.Models
         public string DisplayName { get; set; }
         public string About { get; set; }
         public string AvatarUrl { get; set; }
-        public string Username { get; set; }
         [Required]
+        public string Username { get; set; }
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }

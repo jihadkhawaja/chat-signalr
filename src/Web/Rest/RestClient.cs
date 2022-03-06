@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace MobileChatWeb.Rest
+namespace MobileChat.Web.Rest
 {
     public enum AuthType
     {

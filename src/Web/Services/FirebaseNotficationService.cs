@@ -1,10 +1,10 @@
-﻿using MobileChatWeb.Interfaces;
-using MobileChatWeb.Models;
-using MobileChatWeb.Rest;
+﻿using MobileChat.Web.Interfaces;
+using MobileChat.Web.Models;
+using MobileChat.Web.Rest;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace MobileChatWeb.Services
+namespace MobileChat.Web.Services
 {
     public class FirebaseNotficationService : IFirebaseNotification
     {

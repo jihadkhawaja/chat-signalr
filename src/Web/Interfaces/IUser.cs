@@ -1,14 +1,12 @@
-﻿using MobileChatWeb.Database;
-using MobileChatWeb.Models;
+﻿using MobileChat.Web.Database;
+using MobileChat.Web.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MobileChatWeb.Interfaces
+namespace MobileChat.Web.Interfaces
 {
     public interface IUser
     {
-        //context
-        DatabaseContext Context();
         //crud
         Task<bool> Create(User user);
         Task<User> ReadById(ulong id);
@@ -20,6 +18,5 @@ namespace MobileChatWeb.Interfaces
         //custom
         Task<bool> UserExist(string username, string email);
         Task<bool> LogIn(string emailorusername, string password);
-        User GetUser();
     }
 }
