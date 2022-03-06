@@ -165,7 +165,7 @@ namespace MobileChat.ViewModel
                         MessagingCenter.Send<ChatViewModel>(this, "ScrollToEnd");
                 });
 
-                hubConnection.On<List<Message>>("ReceiveOldMessage", chatmessages =>
+                hubConnection.On<List<Message>>("ReceiveMessageHistory", chatmessages =>
                 {
                     Messages.Clear();
                     foreach (Message cm in chatmessages)
