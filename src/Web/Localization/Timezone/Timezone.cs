@@ -23,7 +23,7 @@ namespace tools.Localization.Timezone
         {
             return TimeZoneInfo.Local.Id;
         }
-        public static DateTime GetCountryTimezone(string zoneID, DateTime timeUtc)
+        public static DateTime? GetCountryTimezone(string zoneID, DateTime timeUtc)
         {
             try
             {
@@ -34,14 +34,14 @@ namespace tools.Localization.Timezone
             {
                 Debug.WriteLine("Unable to find the {0} zone in the registry.",
                                  zoneID);
-                throw;
             }
             catch (InvalidTimeZoneException)
             {
                 Debug.WriteLine("Registry data on the {0} zone has been corrupted.",
                                  zoneID);
-                throw;
             }
+
+            return null;
         }
     }
 }
