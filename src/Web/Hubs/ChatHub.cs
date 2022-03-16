@@ -11,6 +11,12 @@ namespace MobileChat.Web.Hubs
 {
     public class ChatHub : Hub
     {
+        public ChatHub(IUser userService, IMessage messageService)
+        {
+            this.userService = userService;
+            this.messageService = messageService;
+        }
+
         [Inject]
         private IUser userService { get; set; }
         [Inject]
@@ -23,10 +29,20 @@ namespace MobileChat.Web.Hubs
         {
             return base.OnDisconnectedAsync(exception);
         }
-        public async Task CreateUser(User user)
+        public async Task SignUp(User user)
         {
             if(!await userService.UserExist(user.Username, user.Email))
                 await userService.Create(user);
+
+            User registeredUser = await userService.ReadByUsername(user.Username);
+            await Clients.Caller.SendAsync("ReceiveAccount", registeredUser);
+        }
+        public async Task SignIn(User user)
+        {
+            if (!await userService.UserExist(user.Username, user.Email)) return;
+
+            User registeredUser = await userService.ReadByUsername(user.Username);
+            await Clients.Caller.SendAsync("ReceiveAccount", registeredUser);
         }
         public async Task ChangePassword(User user, string newpassword)
         {
@@ -48,6 +64,8 @@ namespace MobileChat.Web.Hubs
 
         public async Task SendMessage(Message msg)
         {
+            msg.DateCreated = DateTime.UtcNow;
+
             //send msg to all suers in the global chat room
             await Clients.All.SendAsync("ReceiveMessage", msg);
 
@@ -59,7 +77,7 @@ namespace MobileChat.Web.Hubs
             HashSet<Message> msgs = await messageService.ReadAll(user.Id);
             await Clients.Caller.SendAsync("ReceiveMessageHistory", msgs);
         }
-        public async Task ReceiveMessageHistory(User user, int index, int range)
+        public async Task ReceiveMessageHistoryRange(User user, int index, int range)
         {
             HashSet<Message> msgs = (await messageService.ReadAll(user.Id)).Skip(index).Take(range).ToHashSet();
             await Clients.Caller.SendAsync("ReceiveMessageHistory", msgs);
