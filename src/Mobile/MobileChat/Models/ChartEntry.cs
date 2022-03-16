@@ -2,7 +2,6 @@
 
 namespace MobileChat.Models
 {
-    [Serializable]
     public class ChartEntry
     {
         public string label { get; set; }

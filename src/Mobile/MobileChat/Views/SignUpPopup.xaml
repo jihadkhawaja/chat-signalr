@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    x:Class="MobileChat.Views.SignUpPopup"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <ContentView.Content>
+        <StackLayout
+            Padding="45,15"
+            BackgroundColor="{DynamicResource PageBackgroundColorSecondary}"
+            Spacing="10">
+            <Label
+                Margin="0,0,0,10"
+                FontSize="Large"
+                Text="Create Account"
+                TextColor="{DynamicResource PrimaryTextColor}" />
+            <Entry
+                x:Name="displayName"
+                Placeholder="Display name"
+                PlaceholderColor="{DynamicResource SecondaryTextColor}"
+                TextColor="{DynamicResource PrimaryTextColor}" />
+            <Entry
+                x:Name="username"
+                Placeholder="Username"
+                PlaceholderColor="{DynamicResource SecondaryTextColor}"
+                TextColor="{DynamicResource PrimaryTextColor}" />
+            <Entry
+                x:Name="password"
+                IsPassword="True"
+                Placeholder="Password"
+                PlaceholderColor="{DynamicResource SecondaryTextColor}"
+                TextColor="{DynamicResource PrimaryTextColor}" />
+            <Entry
+                x:Name="confirmPassword"
+                IsPassword="True"
+                Placeholder="Confirm password"
+                PlaceholderColor="{DynamicResource SecondaryTextColor}"
+                TextColor="{DynamicResource PrimaryTextColor}" />
+            <Button
+                BackgroundColor="{DynamicResource PageBackgroundColorSecondary}"
+                Clicked="SignIn_Clicked"
+                Text="Sign In"
+                TextColor="{DynamicResource SecondaryTextColor}" />
+            <Button
+                BackgroundColor="{DynamicResource PageBackgroundColorSecondary}"
+                Clicked="Create_Clicked"
+                Text="Create"
+                TextColor="{DynamicResource PrimaryTextColor}" />
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

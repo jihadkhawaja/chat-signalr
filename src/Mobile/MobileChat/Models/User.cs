@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace MobileChat.Models
 {
@@ -8,6 +9,8 @@ namespace MobileChat.Models
     {
         public ulong Id { get; set; }
         public string DisplayName { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
         public DateTime DateCreated { get; set; }
     }
 }

@@ -8,6 +8,8 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using System.Diagnostics;
+using MobileChat.Views;
 
 namespace MobileChat.ViewModel
 {
@@ -21,10 +23,8 @@ namespace MobileChat.ViewModel
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public int totalusers = 0;
-
         private Message _usermessage = new Message();
-        public Message chatmessage
+        public Message UserMessage
         {
             get
             {
@@ -36,7 +36,7 @@ namespace MobileChat.ViewModel
                 OnPropertyChanged();
             }
         }
-        private User _user = new User();
+        private User _user;
         public User User
         {
             get
@@ -117,6 +117,25 @@ namespace MobileChat.ViewModel
 
         public bool AutoScrollDown;
 
+        private SignUpPopup signUpPopup { get; set; }
+        private SignInPopup signInPopup { get; set; }
+
+        private View popupView;
+
+        public View PopupView
+        {
+            get 
+            { 
+                return popupView; 
+            }
+            set 
+            {
+                popupView = value; 
+                OnPropertyChanged(); 
+            }
+        }
+
+
         private HubConnection hubConnection;
 
         public Command SendMessageCommand { get; }
@@ -128,11 +147,11 @@ namespace MobileChat.ViewModel
             try
             {
                 Messages = new ObservableCollection<Message>();
-                SendMessageCommand = new Command(async () => { await SendMessage(chatmessage); });
+                SendMessageCommand = new Command(async () => { await SendMessage(UserMessage); });
                 ConnectCommand = new Command(async () => await Connect());
                 DisconnectCommand = new Command(async () => await Disconnect());
 
-                User = new User();
+                User = App.appSettings.user;
 
                 IsConnected = false;
 
@@ -142,33 +161,42 @@ namespace MobileChat.ViewModel
 
                 hubConnection.On<User>("JoinChat", o =>
                 {
-                    totalusers++;
-                    TotalUsers = $"{totalusers} users in chat";
+                    //todo
+                    TotalUsers = $"[number] users in chat";
                 });
 
                 hubConnection.On<User>("LeaveChat", o =>
                 {
-                    totalusers--;
-                    TotalUsers = $"{totalusers} users in chat";
+                    //todo
+                    TotalUsers = $"[number] users in chat";
                 });
 
-                hubConnection.On<Message>("ReceiveMessage", chatmessage =>
+                hubConnection.On<User>("ReceiveAccount", async o =>
                 {
-                    if (chatmessage.UserId == User.Id)
-                        chatmessage.IsYourMessage = true;
-                    else
-                        chatmessage.IsYourMessage = false;
+                    User = App.appSettings.user = o;
+                    SavingManager.JsonSerialization.WriteToJsonFile<AppSettings>("appsettings/user", App.appSettings);
 
-                    Messages.Add(chatmessage);
+                    await hubConnection.InvokeAsync("JoinChat", User);
+                    await hubConnection.InvokeAsync("ReceiveMessageHistory", User);
+                });
+
+                hubConnection.On<Message>("ReceiveMessage", o =>
+                {
+                    if (o.UserId == User.Id)
+                        o.IsYourMessage = true;
+                    else
+                        o.IsYourMessage = false;
+
+                    Messages.Add(o);
 
                     if (AutoScrollDown)
                         MessagingCenter.Send<ChatViewModel>(this, "ScrollToEnd");
                 });
 
-                hubConnection.On<List<Message>>("ReceiveMessageHistory", chatmessages =>
+                hubConnection.On<List<Message>>("ReceiveMessageHistory", o =>
                 {
                     Messages.Clear();
-                    foreach (Message cm in chatmessages)
+                    foreach (Message cm in o)
                     {
                         if (cm.UserId == User.Id)
                             cm.IsYourMessage = true;
@@ -180,6 +208,8 @@ namespace MobileChat.ViewModel
 
                     MessagingCenter.Send<ChatViewModel>(this, "ScrollToEnd");
                 });
+
+                Connect();
             }
             catch { }
         }
@@ -195,7 +225,9 @@ namespace MobileChat.ViewModel
                 if (!IsConnected)
                 {
                     await hubConnection.StartAsync();
-                    await hubConnection.InvokeAsync("JoinChat");
+
+                    if (User is null) await DisplaySignUp();
+                    else await SignIn(User);
 
                     IsConnected = true;
                 }
@@ -203,59 +235,77 @@ namespace MobileChat.ViewModel
             catch (Exception e)
             {
                 IsConnected = false;
-                await App.Current.MainPage.DisplayAlert("Error", "Connection lost, Connect to the internet and try again", "Ok");
+                await App.Current.MainPage.DisplayAlert("Error", $"Connection lost, Connect to the internet and try again, Message:{e.Message}", "Ok");
             }
 
             IsLoading = false;
         }
         public async Task Disconnect()
         {
-            await hubConnection.InvokeAsync("LeaveChat");
+            await hubConnection.InvokeAsync("LeaveChat", User);
             await hubConnection.StopAsync();
 
             IsConnected = false;
         }
-        private async Task SendMessage(Message chatmessage)
+        private async Task SendMessage(Message msg)
         {
             IsLoading = true;
             try
             {
                 if (!string.IsNullOrEmpty(Message) && !string.IsNullOrWhiteSpace(Message))
                 {
-                    chatmessage.Content = Message;
-                    await hubConnection.InvokeAsync("SendMessage", chatmessage);
+                    msg.UserId = User.Id;
+                    msg.Content = Message;
+                    await hubConnection.InvokeAsync("SendMessage", msg);
                     Message = string.Empty;
                 }
 
                 MessagingCenter.Send<ChatViewModel>(this, "ScrollToEnd");
             }
-            catch
+            catch(Exception e)
             {
+                Debug.WriteLine(e);
                 await Connect();
             }
             IsLoading = false;
         }
 
-        public async Task CreateUsername(bool overwrite = false)
+        public async Task SignUp(User user)
         {
-            if (!string.IsNullOrEmpty(App.appSettings.chatUserName) && !overwrite)
+            try
             {
-                User.DisplayName = "Logged as " + SavingManager.JsonSerialization.ReadFromJsonFile<AppSettings>("appsettings /user").chatUserName;
-                return;
+                await hubConnection.InvokeAsync("SignUp", user);
+
+                PopupView = null;
             }
+            catch { }
+        }
 
-            string results = await App.Current.MainPage.DisplayPromptAsync("What should we call you?", "Enter your display name", "Apply", "Close",
-                "Anonymous", 50, Keyboard.Chat, "");
+        public async Task SignIn(User user)
+        {
+            try
+            {
+                await hubConnection.InvokeAsync("SignIn", user);
 
-            if ((string.IsNullOrEmpty(results) || string.IsNullOrWhiteSpace(results)) && !string.IsNullOrEmpty(App.appSettings.chatUserName))
-                return;
-            else if (string.IsNullOrEmpty(results) || string.IsNullOrWhiteSpace(results))
-                App.appSettings.chatUserName = "Anonymous";
-            else
-                App.appSettings.chatUserName = results;
-            User.DisplayName = "Logged as " + App.appSettings.chatUserName;
+                PopupView = null;
+            }
+            catch { }
+        }
 
-            SavingManager.JsonSerialization.WriteToJsonFile<AppSettings>("appsettings/user", App.appSettings);
+        public Task DisplaySignUp()
+        {
+            PopupView = signUpPopup = new SignUpPopup();
+            signUpPopup.Init(this);
+
+            return Task.CompletedTask;
+        }
+
+        public Task DisplaySignIn()
+        {
+            PopupView = signInPopup = new SignInPopup();
+            signInPopup.Init(this);
+
+            return Task.CompletedTask;
         }
     }
 }

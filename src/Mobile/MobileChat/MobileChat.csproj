@@ -24,6 +24,9 @@
 		<Compile Update="Themes\Light.xaml.cs">
 			<DependentUpon>Light.xaml</DependentUpon>
 		</Compile>
+		<Compile Update="Views\SignInPopup.xaml.cs">
+		  <DependentUpon>SignInPopup.xaml</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -39,8 +42,14 @@
 		<EmbeddedResource Update="Views\GasGas.xaml">
 			<Generator>MSBuild:UpdateDesignTimeXaml</Generator>
 		</EmbeddedResource>
+		<EmbeddedResource Update="Views\SignInPopup.xaml">
+		  <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+		</EmbeddedResource>
 		<EmbeddedResource Update="Views\SettingsPage.xaml">
 			<Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Views\SignUpPopup.xaml">
+		  <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
 		</EmbeddedResource>
 	</ItemGroup>
 

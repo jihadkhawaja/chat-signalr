@@ -2,7 +2,6 @@
 
 namespace MobileChat.Models
 {
-    [Serializable]
     public class AppSettings
     {
         public enum Theme
@@ -12,6 +11,6 @@ namespace MobileChat.Models
         }
 
         public Theme theme { get; set; }
-        public string chatUserName { get; set; }
+        public User user { get; set; }
     }
 }

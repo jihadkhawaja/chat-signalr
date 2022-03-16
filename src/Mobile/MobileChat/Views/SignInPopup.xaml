@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    x:Class="MobileChat.Views.SignInPopup"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <ContentView.Content>
+        <StackLayout
+            Padding="45,15"
+            BackgroundColor="{DynamicResource PageBackgroundColorSecondary}"
+            Spacing="10">
+            <Label
+                Margin="0,0,0,10"
+                FontSize="Large"
+                Text="Log In"
+                TextColor="{DynamicResource PrimaryTextColor}" />
+            <Entry
+                x:Name="username"
+                Placeholder="Username"
+                PlaceholderColor="{DynamicResource SecondaryTextColor}"
+                TextColor="{DynamicResource PrimaryTextColor}" />
+            <Entry
+                x:Name="password"
+                IsPassword="True"
+                Placeholder="Password"
+                PlaceholderColor="{DynamicResource SecondaryTextColor}"
+                TextColor="{DynamicResource PrimaryTextColor}" />
+            <Button
+                BackgroundColor="{DynamicResource PageBackgroundColorSecondary}"
+                Clicked="Create_Clicked"
+                Text="Create Account"
+                TextColor="{DynamicResource SecondaryTextColor}" />
+            <Button
+                BackgroundColor="{DynamicResource PageBackgroundColorSecondary}"
+                Clicked="SignIn_Clicked"
+                Text="Sign In"
+                TextColor="{DynamicResource PrimaryTextColor}" />
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

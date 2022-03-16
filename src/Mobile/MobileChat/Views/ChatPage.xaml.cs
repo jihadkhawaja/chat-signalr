@@ -13,15 +13,16 @@ namespace MobileChat.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ChatPage : ContentPage
     {
+        private ChatViewModel viewModel { get; set; }
         public ChatPage()
         {
-            this.BindingContext = App.chat;
+            this.BindingContext = viewModel = new ChatViewModel();
             InitializeComponent();
 
             Subscribe();
         }
 
-        protected override async void OnAppearing()
+        protected override void OnAppearing()
         {
             base.OnAppearing();
 
@@ -48,12 +49,6 @@ namespace MobileChat.Views
                         break;
                 }
             }
-
-            //TODO
-            //if (string.IsNullOrEmpty(App.chat.chatmessage.UserName))
-            //    await App.chat.CreateUsername();
-
-            await App.chat.Connect();
 
             ScrollToEnd(false);
         }
@@ -84,19 +79,19 @@ namespace MobileChat.Views
 
         private void ChatList_ItemAppearing(object sender, ItemVisibilityEventArgs e)
         {
-            //if ((ChatMessage)e.Item == App.chat.Messages[0])
+            //if ((ChatMessage)e.Item == viewModel.Messages[0])
             //{
             //    //First Item has been hit
             //}
 
-            if ((Message)e.Item == App.chat.Messages[App.chat.Messages.Count - 1])
+            if ((Message)e.Item == viewModel.Messages[viewModel.Messages.Count - 1])
             {
                 //Last Item has been hit
-                App.chat.AutoScrollDown = true;
+                viewModel.AutoScrollDown = true;
             }
             else
             {
-                App.chat.AutoScrollDown = false;
+                viewModel.AutoScrollDown = false;
             }
         }
 
@@ -107,7 +102,7 @@ namespace MobileChat.Views
         /// <param name="e"></param>
         private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
         {
-            await App.chat.CreateUsername(true);
+            //change username
         }
 
         private async void ToolbarItem_Clicked(object sender, EventArgs e)

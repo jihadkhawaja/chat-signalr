@@ -8,6 +8,7 @@
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:helpers="clr-namespace:MobileChat.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:view="clr-namespace:MobileChat.Views"
     xmlns:vm="clr-namespace:MobileChat.ViewModel"
     Title="Chat"
     BackgroundColor="{DynamicResource PageBackgroundColorSecondary}"
@@ -114,13 +115,13 @@
                                                 FontAttributes="None"
                                                 FontSize="10"
                                                 HorizontalOptions="Start"
-                                                Text="{Binding UserName}"
+                                                Text="{Binding UserId}"
                                                 TextColor="{Binding IsYourMessage, Converter={StaticResource BoolToColorMessageText}}" />
 
                                             <Label
                                                 FontAttributes="Bold"
-                                                IsVisible="{Binding Message, Converter={StaticResource NullToBoolConverter}}"
-                                                Text="{Binding Message}"
+                                                IsVisible="{Binding Content, Converter={StaticResource NullToBoolConverter}}"
+                                                Text="{Binding Content}"
                                                 TextColor="{Binding IsYourMessage, Converter={StaticResource BoolToColorMessageText}}" />
 
                                             <StackLayout Orientation="Horizontal">
@@ -128,7 +129,7 @@
                                                     FontAttributes="Italic"
                                                     FontSize="10"
                                                     HorizontalOptions="Start"
-                                                    Text="{Binding DateMessageDate}"
+                                                    Text="{Binding DateCreated}"
                                                     TextColor="{Binding IsYourMessage, Converter={StaticResource BoolToColorMessageText}}" />
 
                                                 <Label
@@ -310,6 +311,16 @@
                     VerticalTextAlignment="Center" />
             </Grid>
         </Grid>
+        <!--  Sign Up Popup  -->
+        <ContentView
+            Content="{Binding PopupView}"
+            HorizontalOptions="Center"
+            IsVisible="{Binding PopupView, Converter={StaticResource NullToBoolConverter}}"
+            RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent,
+                                                                   Property=Height}"
+            RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent,
+                                                                  Property=Width}"
+            VerticalOptions="Center" />
         <!--  loading  -->
         <Grid
             HorizontalOptions="FillAndExpand"

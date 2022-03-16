@@ -12,9 +12,6 @@ namespace MobileChat
     {
         public static AppSettings appSettings;
 
-        //chat
-        public static ChatViewModel chat;
-
         public static string CurrentPage = "ChatPage";
 
         //const
@@ -25,7 +22,8 @@ namespace MobileChat
         public const string AppName = "Mobile Chat";
 
         //SignalR Web URL example (http://localhost:2736/chathub) where the chat web app is hosted
-        public const string hubConnectionURL = "";
+        public const string hubName = "chathub";
+        public const string hubConnectionURL = "" + hubName;
 
         //follow me and give this repo a star if you liked it <3
         public const string feedback = "https://twitter.com/jihadkhawaja";
@@ -43,14 +41,11 @@ namespace MobileChat
 
             InitializeComponent();
 
-            chat = new ChatViewModel();
-
             MainPage = new NavigationPage(new ChatPage());
         }
 
-        protected override async void OnStart()
+        protected override void OnStart()
         {
-            //await chat.Connect();
         }
 
         protected override void OnSleep()
