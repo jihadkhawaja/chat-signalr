@@ -3,24 +3,7 @@
 ![Xamarin Chat SignalR Icon](docs/icon.png)
 
 # Features
-- Material UI
-- Modern Global Chat
-- Walkthrough
-- Settings
-- Dark & Light Theme
-- Multiple Language Support
-- App Share & Rate
-- Multiple Serialization Methods with Encryption
-- Tab badges
-- Font Awesome
-
-### Light Theme
-
-![Screenshot 1](docs/Screenshot1.png)
-
-### Dark Theme
-
-![Screenshot 2](docs/Screenshot2.png)
+- .Net 6
 
 # Usage
 
@@ -31,22 +14,5 @@
 
 [Youtube Tutorial](https://youtu.be/XJHMjS201nw) (5 min)
 
-## Tested Environment
-
-### Android
-Phone & Tablets
-9.0 -> 11.0
-### iOS
-iPhone & iPads
-10.0 -> 14.5
-
 # Future updates
 - Use a database instead of Json serializations
-- Add Friends tab
-- Chatting Rooms
-- Chat Moderation
-- Notifications
-- UWP Support
-- .NET 6 Support
-
-![Xamarin Chat SignalR](docs/ios.png)
