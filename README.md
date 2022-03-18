@@ -1,4 +1,4 @@
-# Xamarin Chat SignalR
+# Xamarin Chat SignalR Client
 
 ![Xamarin Chat SignalR Icon](docs/icon.png)
 
@@ -35,18 +35,15 @@
 
 ### Android
 Phone & Tablets
-9.0 -> 11.0
+9.0 -> 12.0
 ### iOS
 iPhone & iPads
 10.0 -> 14.5
 
 # Future updates
-- Use a database instead of Json serializations
 - Add Friends tab
 - Chatting Rooms
 - Chat Moderation
 - Notifications
-- UWP Support
-- .NET 6 Support
 
 ![Xamarin Chat SignalR](docs/ios.png)
