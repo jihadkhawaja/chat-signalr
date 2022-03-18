@@ -46,7 +46,7 @@ iPhone & iPads
 - Chatting Rooms
 - Chat Moderation
 - Notifications
-- UWP Support
-- .NET 6 Support
+- Windows Support (MAUI)
+- .NET 6 Support (MAUI & Server)
 
 ![Xamarin Chat SignalR](docs/ios.png)
