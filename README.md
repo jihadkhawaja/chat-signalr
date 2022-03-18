@@ -13,6 +13,3 @@
 3. Launch the Android or iOS project.
 
 [Youtube Tutorial](https://youtu.be/XJHMjS201nw) (5 min)
-
-# Future updates
-- Use a database instead of Json serializations
