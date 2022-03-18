@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.SignalR;
 using MobileChat.Web.Interfaces;
 using MobileChat.Web.Models;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,6 +13,7 @@ namespace MobileChat.Web.Hubs
 {
     public class ChatHub : Hub
     {
+        private static List<string> GlobalChatConnections = new();
         public ChatHub(IUser userService, IMessage messageService)
         {
             this.userService = userService;
@@ -27,11 +30,13 @@ namespace MobileChat.Web.Hubs
         }
         public override Task OnDisconnectedAsync(Exception exception)
         {
+            GlobalChatConnections.Remove(Context.ConnectionId);
+
             return base.OnDisconnectedAsync(exception);
         }
         public async Task SignUp(User user)
         {
-            if(!await userService.UserExist(user.Username, user.Email))
+            if(!await userService.UserExist(user.Username))
                 await userService.Create(user);
 
             User registeredUser = await userService.ReadByUsername(user.Username);
@@ -39,27 +44,38 @@ namespace MobileChat.Web.Hubs
         }
         public async Task SignIn(User user)
         {
-            if (!await userService.UserExist(user.Username, user.Email)) return;
+            if (!await userService.UserExist(user.Username)) return;
 
             User registeredUser = await userService.ReadByUsername(user.Username);
             await Clients.Caller.SendAsync("ReceiveAccount", registeredUser);
         }
         public async Task ChangePassword(User user, string newpassword)
         {
-            if (await userService.UserExist(user.Username, user.Email))
+            if (await userService.UserExist(user.Username))
             {
                 user.Password = newpassword;
                 await userService.Update(user);
             }   
         }
-        public async Task JoinChat(User user)
+        public async Task JoinGlobalChat(string displayName)
         {
-            await Clients.All.SendAsync("JoinChat", user);
+            await Clients.All.SendAsync("JoinGlobalChat", displayName);
+
+            Debug.WriteLine("Connection Id: " + Context.ConnectionId);
+            if(!GlobalChatConnections.Contains(Context.ConnectionId))
+                GlobalChatConnections.Add(Context.ConnectionId);
         }
 
-        public async Task LeaveChat(User user)
+        public async Task LeaveGlobalChat(string displayName)
         {
-            await Clients.All.SendAsync("LeaveChat", user);
+            await Clients.All.SendAsync("LeaveGlobalChat", displayName);
+
+            GlobalChatConnections.Remove(Context.ConnectionId);
+        }
+
+        public async Task GlobalChatInfo()
+        {
+            await Clients.All.SendAsync("GlobalChatInfo", GlobalChatConnections.Count);
         }
 
         public async Task SendMessage(Message msg)
@@ -72,14 +88,19 @@ namespace MobileChat.Web.Hubs
             //save msg to db
             await messageService.Create(msg);
         }
-        public async Task ReceiveMessageHistory(User user)
+        public async Task ReceiveGlobalMessageHistory()
         {
-            HashSet<Message> msgs = await messageService.ReadAll(user.Id);
+            HashSet<Message> msgs = await messageService.ReadAll();
+            await Clients.Caller.SendAsync("ReceiveGlobalMessageHistory", msgs);
+        }
+        public async Task ReceiveMessageHistory(User user, User user2)
+        {
+            HashSet<Message> msgs = await messageService.ReadAll(user.Id, user2.Id);
             await Clients.Caller.SendAsync("ReceiveMessageHistory", msgs);
         }
-        public async Task ReceiveMessageHistoryRange(User user, int index, int range)
+        public async Task ReceiveMessageHistoryRange(User user, User user2, int index, int range)
         {
-            HashSet<Message> msgs = (await messageService.ReadAll(user.Id)).Skip(index).Take(range).ToHashSet();
+            HashSet<Message> msgs = (await messageService.ReadAll(user.Id, user2.Id)).Skip(index).Take(range).ToHashSet();
             await Clients.Caller.SendAsync("ReceiveMessageHistory", msgs);
         }
     }

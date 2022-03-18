@@ -16,7 +16,7 @@ namespace MobileChat.Web.Interfaces
         Task<bool> Update(User user);
         Task<bool> Delete(ulong id);
         //custom
-        Task<bool> UserExist(string username, string email);
+        Task<bool> UserExist(string emailorusername);
         Task<bool> LogIn(string emailorusername, string password);
     }
 }

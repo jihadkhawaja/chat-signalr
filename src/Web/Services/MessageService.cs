@@ -53,10 +53,17 @@ namespace MobileChat.Web.Services
                 return Task.FromResult(false);
             }
         }
-
+        public Task<HashSet<Message>> ReadAll()
+        {
+            return Task.FromResult(context.Messages.ToHashSet());
+        }
         public Task<HashSet<Message>> ReadAll(ulong userid)
         {
             return Task.FromResult(context.Messages.Where(x => x.UserId == userid).ToHashSet());
+        }
+        public Task<HashSet<Message>> ReadAll(ulong userid, ulong userid2)
+        {
+            return Task.FromResult(context.Messages.Where(x => x.UserId == userid || x.UserId == userid2).ToHashSet());
         }
 
         public Task<Message> ReadById(Guid id)

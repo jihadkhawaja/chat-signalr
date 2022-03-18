@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MobileChat.Web.Database;
 
@@ -11,9 +12,10 @@ using MobileChat.Web.Database;
 namespace MobileChat.Web.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220317130643_3")]
+    partial class _3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,9 +89,6 @@ namespace MobileChat.Web.Migrations
 
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsOnline")
-                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");

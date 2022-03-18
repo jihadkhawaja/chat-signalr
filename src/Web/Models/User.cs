@@ -28,6 +28,7 @@ namespace MobileChat.Web.Models
         public string FirebaseToken { get; set; }
         [Required]
         public int Permission { get; set; }
+        public bool IsOnline { get; set; }
         public DateTime DateCreated { get; set; }
     }
 }

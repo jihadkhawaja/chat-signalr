@@ -103,24 +103,39 @@ namespace MobileChat.Web.Services
             }
         }
 
-        public Task<bool> UserExist(string username, string email)
+        public Task<bool> UserExist(string emailorusername)
         {
             try
             {
-                User dbentry = context.Users.Single(x => x.Username == username || x.Email == email);
+                bool IsEmail = Regex.IsMatch(emailorusername, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase);
 
-                if (dbentry is not null)
+                User dbentry;
+
+                if (IsEmail)
                 {
-                    return Task.FromResult(true);
-                }
+                    dbentry = context.Users.Single(x => x.Email == emailorusername);
 
-                return Task.FromResult(false);
+                    if (dbentry is not null)
+                    {
+                        return Task.FromResult(true);
+                    }
+                }
+                else
+                {
+                    dbentry = context.Users.Single(x => x.Username == emailorusername);
+
+                    if (dbentry is not null)
+                    {
+                        return Task.FromResult(true);
+                    }
+                }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                return Task.FromResult(false);
             }
+
+            return Task.FromResult(false);
         }
         public Task<bool> LogIn(string emailorusername, string password)
         {
@@ -143,14 +158,13 @@ namespace MobileChat.Web.Services
                 {
                     return Task.FromResult(true);
                 }
-
-                return Task.FromResult(false);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                return Task.FromResult(false);
             }
+
+            return Task.FromResult(false);
         }
     }
 }
