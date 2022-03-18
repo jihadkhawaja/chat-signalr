@@ -9,6 +9,11 @@ namespace MobileChat.Models
     {
         public Guid Id { get; set; }
         public ulong UserId { get; set; }
+        public string DisplayName { get; set; }
+        public bool Sent { get; set; }
+        public DateTime DateSent { get; set; }
+        public bool Seen { get; set; }
+        public DateTime DateSeen { get; set; }
         public string Content { get; set; }
         public DateTime DateCreated { get; set; }
         [JsonIgnore]

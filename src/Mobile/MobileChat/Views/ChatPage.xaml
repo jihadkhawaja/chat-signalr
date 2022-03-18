@@ -8,16 +8,10 @@
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:helpers="clr-namespace:MobileChat.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:view="clr-namespace:MobileChat.Views"
-    xmlns:vm="clr-namespace:MobileChat.ViewModel"
     Title="Chat"
     BackgroundColor="{DynamicResource PageBackgroundColorSecondary}"
     NavigationPage.HasNavigationBar="True"
     mc:Ignorable="d">
-
-    <ContentPage.BindingContext>
-        <vm:ChatViewModel />
-    </ContentPage.BindingContext>
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -115,7 +109,7 @@
                                                 FontAttributes="None"
                                                 FontSize="10"
                                                 HorizontalOptions="Start"
-                                                Text="{Binding UserId}"
+                                                Text="{Binding DisplayName}"
                                                 TextColor="{Binding IsYourMessage, Converter={StaticResource BoolToColorMessageText}}" />
 
                                             <Label
@@ -136,7 +130,7 @@
                                                     FontFamily="{StaticResource MaterialFontFamilySolid}"
                                                     FontSize="10"
                                                     HorizontalOptions="EndAndExpand"
-                                                    IsVisible="{Binding SentState, Converter={StaticResource NullToBoolConverter}}"
+                                                    IsVisible="{Binding Sent, Converter={StaticResource NullToBoolConverter}}"
                                                     Text="{x:Static helpers:IconFont.Check}" />
                                             </StackLayout>
                                         </StackLayout>

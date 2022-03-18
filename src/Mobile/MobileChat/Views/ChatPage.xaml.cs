@@ -16,7 +16,7 @@ namespace MobileChat.Views
         private ChatViewModel viewModel { get; set; }
         public ChatPage()
         {
-            this.BindingContext = viewModel = new ChatViewModel();
+            BindingContext = viewModel = new ChatViewModel();
             InitializeComponent();
 
             Subscribe();
