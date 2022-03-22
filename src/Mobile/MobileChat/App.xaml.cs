@@ -41,7 +41,8 @@ namespace MobileChat
 
             InitializeComponent();
 
-            MainPage = new NavigationPage(new ChatPage());
+            //MainPage = new NavigationPage(new ChatPage());
+            MainPage = new NavigationPage(new FriendsPage());
         }
 
         protected override void OnStart()

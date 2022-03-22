@@ -1,28 +1,18 @@
-﻿using MobileChat.Cache;
+﻿using Microsoft.AspNetCore.SignalR.Client;
+using MobileChat.Cache;
 using MobileChat.Models;
+using MobileChat.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using System.Diagnostics;
-using MobileChat.Views;
-using Microsoft.AspNetCore.SignalR.Client;
 
 namespace MobileChat.ViewModel
 {
-    public class ChatViewModel : INotifyPropertyChanged
+    public class ChatViewModel : ViewModelBase
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         private Message _usermessage = new Message();
         public Message UserMessage
         {
@@ -124,14 +114,14 @@ namespace MobileChat.ViewModel
 
         public View PopupView
         {
-            get 
-            { 
-                return popupView; 
-            }
-            set 
+            get
             {
-                popupView = value; 
-                OnPropertyChanged(); 
+                return popupView;
+            }
+            set
+            {
+                popupView = value;
+                OnPropertyChanged();
             }
         }
 
@@ -314,7 +304,7 @@ namespace MobileChat.ViewModel
 
                 MessagingCenter.Send<ChatViewModel>(this, "ScrollToEnd");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Debug.WriteLine(e);
                 //await Connect();
