@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MobileChat.ViewModel
 {
@@ -18,13 +19,26 @@ namespace MobileChat.ViewModel
 
         public FriendsViewModel()
         {
-            friends = new ObservableCollection<User> 
-            { 
-                new User { DisplayName = "Jhon Doe" },
-                new User { DisplayName = "Jhon Doe" },
-                new User { DisplayName = "Jhon Doe" },
-                new User { DisplayName = "Jhon Doe" },
-            };
+            LoadFriends();
+        }
+
+        public Task AddFriend(User user)
+        {
+            friends.Add(user);
+
+            return Task.CompletedTask;
+        }
+
+        public Task RemoveFriend(User user)
+        {
+            friends.Remove(user);
+
+            return Task.CompletedTask;
+        }
+
+        public Task LoadFriends()
+        {
+            return Task.CompletedTask;
         }
     }
 }

@@ -10,7 +10,7 @@ using Xamarin.Forms.Xaml;
 
 namespace MobileChat.Views
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
+    [XamlCompilation(XamlCompilationOptions.Skip)]
     public partial class ChatPage : ContentPage
     {
         private ChatViewModel viewModel { get; set; }

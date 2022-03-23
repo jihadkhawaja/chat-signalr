@@ -11,7 +11,7 @@ using Xamarin.Forms.Xaml;
 
 namespace MobileChat.Views
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
+    [XamlCompilation(XamlCompilationOptions.Skip)]
     public partial class FriendsPage : ContentPage
     {
         FriendsViewModel viewModel { get; set; } 
@@ -26,9 +26,14 @@ namespace MobileChat.Views
             User user = e.Item as User;
         }
 
-        private void ToolbarItem_Clicked(object sender, EventArgs e)
+        private async void AddUserButton(object sender, EventArgs e)
         {
+            string result = await DisplayPromptAsync("Friend Username", "Enter your friend username");
+        }
 
+        private void GlobalChatButton(object sender, EventArgs e)
+        {
+            Navigation.PushAsync(new ChatPage());
         }
     }
 }

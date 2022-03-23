@@ -5,13 +5,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:MobileChat.Controls"
     xmlns:converters="clr-namespace:MobileChat.Converters"
-    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:helpers="clr-namespace:MobileChat.Helpers"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodel="clr-namespace:MobileChat.ViewModel"
     Title="Chat"
+    x:DataType="viewmodel:ChatViewModel"
     BackgroundColor="{DynamicResource PageBackgroundColorSecondary}"
-    NavigationPage.HasNavigationBar="True"
-    mc:Ignorable="d">
+    NavigationPage.HasNavigationBar="True">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -66,7 +65,7 @@
                     FlowDirection="LeftToRight"
                     FontSize="12"
                     HorizontalOptions="EndAndExpand"
-                    Text="{Binding User.DisplayName}"
+                    Text="{Binding User.Username}"
                     TextColor="Gray"
                     VerticalOptions="Center">
                     <Label.GestureRecognizers>
