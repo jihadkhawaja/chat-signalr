@@ -25,5 +25,10 @@ namespace MobileChat.Views
         {
             User user = e.Item as User;
         }
+
+        private void ToolbarItem_Clicked(object sender, EventArgs e)
+        {
+
+        }
     }
 }

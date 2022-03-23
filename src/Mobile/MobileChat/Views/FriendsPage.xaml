@@ -1,14 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MobileChat.Views.FriendsPage" BackgroundColor="{DynamicResource PageBackgroundColorSecondary}">
+             x:Class="MobileChat.Views.FriendsPage"
+             xmlns:helpers="clr-namespace:MobileChat.Helpers"
+             BackgroundColor="{DynamicResource PageBackgroundColorSecondary}"
+             Title="Friends">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Clicked="ToolbarItem_Clicked">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="{StaticResource MaterialFontFamilySolid}"
+                    Glyph="{x:Static helpers:IconFont.Plus}"
+                    Size="Large" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout Margin="0,10,0,0">
             <ListView ItemsSource="{Binding Friends}" SelectionMode="None" ItemTapped="ListView_ItemTapped">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Label Text="{Binding DisplayName}" TextColor="{DynamicResource PrimaryTextColor}"/>
+                            <StackLayout Orientation="Horizontal" Padding="10">
+                                <Label Text="{Binding DisplayName}" TextColor="{DynamicResource PrimaryTextColor}"/>
+                            </StackLayout>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
