@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using MobileChat.Cache;
+using MobileChat.Interface;
 using MobileChat.Models;
+using MobileChat.Services;
 using MobileChat.Views;
 using System;
 using System.Collections.Generic;
@@ -13,6 +15,7 @@ namespace MobileChat.ViewModel
 {
     public class ChatViewModel : ViewModelBase
     {
+        public ISignalR signalRService { get; set; }
         private Message _usermessage = new Message();
         public Message UserMessage
         {
@@ -125,77 +128,61 @@ namespace MobileChat.ViewModel
             }
         }
 
-
-        private HubConnection hubConnection;
-
         public Command SendMessageCommand { get; }
         public Command ConnectCommand { get; }
         public Command DisconnectCommand { get; }
 
         public ChatViewModel()
         {
-            try
+            Messages = new ObservableCollection<Message>();
+            SendMessageCommand = new Command(async () => { await SendMessage(UserMessage); });
+            ConnectCommand = new Command(async () => await Connect());
+            DisconnectCommand = new Command(async () => await Disconnect());
+
+            User = App.appSettings.user;
+
+            signalRService = DependencyService.Get<ISignalR>();
+
+            if(signalRService.Initialize(App.hubConnectionURL))
             {
-                Messages = new ObservableCollection<Message>();
-                SendMessageCommand = new Command(async () => { await SendMessage(UserMessage); });
-                ConnectCommand = new Command(async () => await Connect());
-                DisconnectCommand = new Command(async () => await Disconnect());
-
-                User = App.appSettings.user;
-
-                IsConnected = false;
-
-                hubConnection = new HubConnectionBuilder()
-                    .WithAutomaticReconnect(new TimeSpan[5]
-                    {
-                        new TimeSpan(0,0,0),
-                        new TimeSpan(0,0,5),
-                        new TimeSpan(0,0,10),
-                        new TimeSpan(0,0,30),
-                        new TimeSpan(0,0,60)
-                    })
-                    .WithUrl(App.hubConnectionURL)
-                    .Build();
-
                 HubEvents();
 
                 Connect().RunSynchronously();
             }
-            catch { }
         }
 
         private void HubEvents()
         {
-            hubConnection.Reconnected += HubConnection_Reconnected;
-            hubConnection.Reconnecting += HubConnection_Reconnecting;
-            hubConnection.Closed += HubConnection_Closed;
+            signalRService.Reconnected += Reconnected;
+            signalRService.Reconnecting += Reconnecting;
+            signalRService.Closed += Closed;
 
-            hubConnection.On<User>("JoinGlobalChat", o =>
+            signalRService.HubConnection.On<User>("JoinGlobalChat", o =>
             {
                 //todo
             });
 
-            hubConnection.On<User>("LeaveGlobalChat", o =>
+            signalRService.HubConnection.On<User>("LeaveGlobalChat", o =>
             {
                 //todo
             });
 
-            hubConnection.On<int>("GlobalChatInfo", o =>
+            signalRService.HubConnection.On<int>("GlobalChatInfo", o =>
             {
                 TotalUsers = $"{o} users in chat";
             });
 
-            hubConnection.On<User>("ReceiveAccount", async o =>
+            signalRService.HubConnection.On<User>("ReceiveAccount", async o =>
             {
                 User = App.appSettings.user = o;
                 SavingManager.JsonSerialization.WriteToJsonFile<AppSettings>("appsettings/user", App.appSettings);
 
-                await hubConnection.InvokeAsync("JoinGlobalChat", User.DisplayName);
-                await hubConnection.InvokeAsync("GlobalChatInfo");
-                await hubConnection.InvokeAsync("ReceiveGlobalMessageHistory");
+                await signalRService.HubConnection.InvokeAsync("JoinGlobalChat", User.DisplayName);
+                await signalRService.HubConnection.InvokeAsync("GlobalChatInfo");
+                await signalRService.HubConnection.InvokeAsync("ReceiveGlobalMessageHistory");
             });
 
-            hubConnection.On<Message>("ReceiveMessage", o =>
+            signalRService.HubConnection.On<Message>("ReceiveMessage", o =>
             {
                 if (o.UserId == User.Id)
                 {
@@ -214,7 +201,7 @@ namespace MobileChat.ViewModel
                     MessagingCenter.Send<ChatViewModel>(this, "ScrollToEnd");
             });
 
-            hubConnection.On<List<Message>>("ReceiveGlobalMessageHistory", o =>
+            signalRService.HubConnection.On<List<Message>>("ReceiveGlobalMessageHistory", o =>
             {
                 Messages.Clear();
                 foreach (Message cm in o)
@@ -231,7 +218,7 @@ namespace MobileChat.ViewModel
             });
         }
 
-        private Task HubConnection_Reconnecting(Exception arg)
+        private Task Reconnecting(Exception arg)
         {
             IsConnected = false;
             IsLoading = true;
@@ -239,7 +226,7 @@ namespace MobileChat.ViewModel
             return Task.CompletedTask;
         }
 
-        private Task HubConnection_Reconnected(string arg)
+        private Task Reconnected(string arg)
         {
             IsConnected = true;
             IsLoading = false;
@@ -247,7 +234,7 @@ namespace MobileChat.ViewModel
             return Task.CompletedTask;
         }
 
-        private Task HubConnection_Closed(Exception arg)
+        private Task Closed(Exception arg)
         {
             IsConnected = false;
             IsLoading = true;
@@ -260,31 +247,39 @@ namespace MobileChat.ViewModel
             if (IsLoading)
                 return;
 
-            IsLoading = true;
-            try
+            switch(signalRService.HubConnection.State)
             {
-                if (!IsConnected)
-                {
-                    await hubConnection.StartAsync();
+                case HubConnectionState.Connected:
+                    return;
+                case HubConnectionState.Disconnected:
+                    IsLoading = true;
 
-                    if (User is null) await DisplaySignUp();
-                    else await SignIn(User);
+                    if (await signalRService.Connect())
+                    {
+                        if (User is null) await DisplaySignUp();
+                        else await SignIn(User);
 
-                    IsConnected = true;
-                }
-            }
-            catch (Exception e)
-            {
-                IsConnected = false;
-                await App.Current.MainPage.DisplayAlert("Error", $"Connection lost, Connect to the internet and try again, Message:{e.Message}", "Ok");
+                        IsConnected = true;
+                    }
+                    else
+                    {
+                        IsConnected = false;
+                    }
+                    break;
+                case HubConnectionState.Connecting:
+                    break;
+                case HubConnectionState.Reconnecting:
+                    break;
+                default:
+                    break;
             }
 
             IsLoading = false;
         }
         public async Task Disconnect()
         {
-            await hubConnection.InvokeAsync("LeaveGlobalChat", User.DisplayName);
-            await hubConnection.StopAsync();
+            await signalRService.HubConnection.InvokeAsync("LeaveGlobalChat", User.DisplayName);
+            await signalRService.Disconnect();
 
             IsConnected = false;
         }
@@ -298,7 +293,7 @@ namespace MobileChat.ViewModel
                     msg.UserId = User.Id;
                     msg.DisplayName = User.DisplayName;
                     msg.Content = Message;
-                    await hubConnection.InvokeAsync("SendMessage", msg);
+                    await signalRService.HubConnection.InvokeAsync("SendMessage", msg);
                     Message = string.Empty;
                 }
 
@@ -316,7 +311,7 @@ namespace MobileChat.ViewModel
         {
             try
             {
-                await hubConnection.InvokeAsync("SignUp", user);
+                await signalRService.HubConnection.InvokeAsync("SignUp", user);
 
                 PopupView = null;
             }
@@ -327,7 +322,7 @@ namespace MobileChat.ViewModel
         {
             try
             {
-                await hubConnection.InvokeAsync("SignIn", user);
+                await signalRService.HubConnection.InvokeAsync("SignIn", user);
 
                 PopupView = null;
             }

@@ -1,5 +1,7 @@
 ﻿using MobileChat.Cache;
+using MobileChat.Interface;
 using MobileChat.Models;
+using MobileChat.Services;
 using MobileChat.ViewModel;
 using MobileChat.Views;
 using System.Globalization;
@@ -40,6 +42,9 @@ namespace MobileChat
             catch { }
 
             InitializeComponent();
+
+            //services
+            DependencyService.Register<ISignalR, SignalRService>();
 
             //MainPage = new NavigationPage(new ChatPage());
             MainPage = new NavigationPage(new FriendsPage());

@@ -1,16 +1,18 @@
-﻿using MobileChat.Models;
+﻿using MobileChat.Interface;
+using MobileChat.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace MobileChat.ViewModel
 {
     public class FriendsViewModel : ViewModelBase
     {
+        public ISignalR signalRService { get; private set; }
         private ObservableCollection<User> friends;
-
         public ObservableCollection<User> Friends
         {
             get { return friends; }
@@ -19,6 +21,8 @@ namespace MobileChat.ViewModel
 
         public FriendsViewModel()
         {
+            signalRService = DependencyService.Get<ISignalR>();
+
             LoadFriends();
         }
 
@@ -38,6 +42,19 @@ namespace MobileChat.ViewModel
 
         public Task LoadFriends()
         {
+            //fake data
+            Friends = new ObservableCollection<User> 
+            { 
+                new User 
+                {
+                    DisplayName = "Jhon Doe" 
+                },
+                new User
+                {
+                    DisplayName = "Jhon Doe 2"
+                },
+            };
+
             return Task.CompletedTask;
         }
     }
