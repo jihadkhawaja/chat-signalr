@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32210.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileChat.Android", "src\Mobile\MobileChat.Android\MobileChat.Android.csproj", "{13C1AC91-1D08-4D23-8341-8F7A31480D7D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileChat.Android", "Mobile\MobileChat.Android\MobileChat.Android.csproj", "{13C1AC91-1D08-4D23-8341-8F7A31480D7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileChat.iOS", "src\Mobile\MobileChat.iOS\MobileChat.iOS.csproj", "{920F307A-42A0-45EF-ABE6-EA093D90F4A5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileChat.iOS", "Mobile\MobileChat.iOS\MobileChat.iOS.csproj", "{920F307A-42A0-45EF-ABE6-EA093D90F4A5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MobileChat", "src\Mobile\MobileChat\MobileChat.csproj", "{108E7B6B-B928-4C52-8412-96C8E384BEED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MobileChat", "Mobile\MobileChat\MobileChat.csproj", "{108E7B6B-B928-4C52-8412-96C8E384BEED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileChat.Test", "Mobile\MobileChat.Test\MobileChat.Test.csproj", "{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -135,6 +137,34 @@ Global
 		{108E7B6B-B928-4C52-8412-96C8E384BEED}.Release|x64.Build.0 = Release|Any CPU
 		{108E7B6B-B928-4C52-8412-96C8E384BEED}.Release|x86.ActiveCfg = Release|Any CPU
 		{108E7B6B-B928-4C52-8412-96C8E384BEED}.Release|x86.Build.0 = Release|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Debug|ARM.Build.0 = Debug|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Debug|x64.Build.0 = Debug|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Debug|x86.Build.0 = Debug|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Release|ARM.ActiveCfg = Release|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Release|ARM.Build.0 = Release|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Release|ARM64.Build.0 = Release|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Release|iPhone.Build.0 = Release|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Release|x64.ActiveCfg = Release|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Release|x64.Build.0 = Release|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Release|x86.ActiveCfg = Release|Any CPU
+		{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
