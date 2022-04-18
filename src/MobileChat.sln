@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32210.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MobileChat.Web", "src\Web\MobileChat.Web.csproj", "{EF504EBA-7EB0-42DD-B71D-289D9383BF8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MobileChat.Web", "Web\MobileChat.Web.csproj", "{EF504EBA-7EB0-42DD-B71D-289D9383BF8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
