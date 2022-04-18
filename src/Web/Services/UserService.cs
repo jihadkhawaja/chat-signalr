@@ -166,5 +166,65 @@ namespace MobileChat.Web.Services
 
             return Task.FromResult(false);
         }
+
+        public Task<bool> LogOut(string emailorusername)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> ChangePassword(string emailorusername, string oldpassword, string newpassword)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> AddFriend(User user, User friend)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> RemoveFriend(User user, User friend)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> SendFriendRequest(User user, User friend)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> AcceptFriendRequest(User user, User friend)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> RejectFriendRequest(User user, User friend)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> BlockFriend(User user, User friend)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> UnblockFriend(User user, User friend)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<User>> GetUserFriends(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<User>> GetUserFriendRequests(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<User>> GetUserBlockedFriends(User user)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

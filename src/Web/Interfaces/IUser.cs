@@ -18,5 +18,17 @@ namespace MobileChat.Web.Interfaces
         //custom
         Task<bool> UserExist(string emailorusername);
         Task<bool> LogIn(string emailorusername, string password);
+        Task<bool> LogOut(string emailorusername);
+        Task<bool> ChangePassword(string emailorusername, string oldpassword, string newpassword);
+        Task<bool> AddFriend(User user, User friend);
+        Task<bool> RemoveFriend(User user, User friend);
+        Task<bool> SendFriendRequest(User user, User friend);
+        Task<bool> AcceptFriendRequest(User user, User friend);
+        Task<bool> RejectFriendRequest(User user, User friend);
+        Task<bool> BlockFriend(User user, User friend);
+        Task<bool> UnblockFriend(User user, User friend);
+        Task<List<User>> GetUserFriends(User user);
+        Task<List<User>> GetUserFriendRequests(User user);
+        Task<List<User>> GetUserBlockedFriends(User user);
     }
 }

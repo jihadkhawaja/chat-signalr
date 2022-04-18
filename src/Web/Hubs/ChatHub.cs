@@ -103,5 +103,33 @@ namespace MobileChat.Web.Hubs
             HashSet<Message> msgs = (await messageService.ReadAll(user.Id, user2.Id)).Skip(index).Take(range).ToHashSet();
             await Clients.Caller.SendAsync("ReceiveMessageHistory", msgs);
         }
+        public async Task AddFriend(User user, User user2)
+        {
+            //todo
+        }
+        public async Task RemoveFriend(User user, User user2)
+        {
+            //todo
+        }
+        public async Task GetFriends(User user)
+        {
+            //todo
+        }
+        public async Task GetFriendRequests(User user)
+        {
+            //todo
+        }
+        public async Task BlockUser(User user, User user2)
+        {
+            //todo
+        }
+        public async Task UnblockUser(User user, User user2)
+        {
+            //todo
+        }
+        public async Task IgnoreFriendRequest(User user, User user2)
+        {
+            //todo
+        }
     }
 }
