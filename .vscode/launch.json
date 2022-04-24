@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Web/bin/Debug/net6.0/MobileChat.Web.dll",
+            "program": "${workspaceFolder}/src/Web/bin/Debug/net6.0/MobileChat.Web.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Web",
+            "cwd": "${workspaceFolder}/src/Web",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
