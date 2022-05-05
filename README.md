@@ -31,4 +31,4 @@ Update-Database
 If your database is setup correctly you should find the database along with your models tables added to it.
 
 # In Progress
-- Use a database instead of Json serializations ✔️
+- [x] Use a database instead of Json serializations
