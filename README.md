@@ -32,3 +32,5 @@ If your database is setup correctly you should find the database along with your
 
 # In Progress
 - [x] Use a database instead of Json serializations
+- [ ] Add Friends
+- [ ] Chatting Rooms
