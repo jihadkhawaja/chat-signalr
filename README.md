@@ -11,6 +11,13 @@
   }
 }
 ```
+- Set your database connection strings in appsettings.json
+```
+"ConnectionStrings": {
+    "DefaultConnection": "Server=.;Database=mobilechatdb;Trusted_Connection=True;",
+    "ProductionConnection": "Server=localhost;Database=databasename;User Id=SA;Password=password;"
+  }
+```
 
 # In Progress
 - Use a database instead of Json serializations ✔️
