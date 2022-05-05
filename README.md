@@ -4,7 +4,7 @@
 
 # Requirements
 - dotnet 6.0 (Required), you can use [Visual Studio 2022](https://visualstudio.microsoft.com/vs/preview/) or install [dotnet-6.0 sdk and runtime](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) and use your favorite editor like [Visual Studio Code](https://code.visualstudio.com/)
-- [mssql server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) (Required)
+- [Microsoft SQL Server (mssql)](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) (Required)
 - [SQL Server Management Studio (SSMS)](https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms) (optinal), You can use visual studio built-in sql server browser and connect your database.
 
 # Usage
