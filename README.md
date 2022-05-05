@@ -3,7 +3,7 @@
 ![Xamarin Chat SignalR Icon](docs/icon.png)
 
 # Requirements
-- Visual Studio 2022 (.Net 6)
+- Visual Studio 2022 (dotnet 6.0)
 - [mssql server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) (Required)
 - [SQL Server Management Studio (SSMS)](https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms) (optinal), You can use visual studio built-in sql server browser and connect your database.
 
