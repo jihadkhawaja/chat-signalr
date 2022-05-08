@@ -179,8 +179,14 @@ namespace MobileChat.Web.Services
 
         public Task<bool> AddFriend(User user, User friend)
         {
+            if(user == null || friend == null)
+                return Task.FromResult(false);
+
             try
             {
+                if(context.UsersFriends.SingleOrDefault(x => x.UserId == user.Id && x.FriendUserId == friend.Id) != null)
+                    return Task.FromResult(false);
+
                 UserFriend entry = new() { UserId = user.Id, FriendUserId = friend.Id, DateCreated = DateTime.UtcNow };
                 context.UsersFriends.Add(entry);
                 context.SaveChanges();
