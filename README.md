@@ -14,6 +14,8 @@
 - Tab badges
 - Font Awesome
 
+![Xamarin Chat SignalR](docs/ios.png)
+
 ### Light and Dark Theme
 
 ![Screenshot 1](docs/Screenshot1.png)
@@ -45,5 +47,3 @@ iPhone & iPads
 - [ ] Notifications -> [development-mobile branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile)
 - [ ] Windows Support (MAUI) -> [development-dotnet-6.0-mobile branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-dotnet-6.0-mobile)
 - [ ] .NET 6 Support (MAUI & Server) -> [development-dotnet-6.0-mobile branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-dotnet-6.0-mobile)
-
-![Xamarin Chat SignalR](docs/ios.png)
