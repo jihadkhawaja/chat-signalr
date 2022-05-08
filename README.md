@@ -14,12 +14,9 @@
 - Tab badges
 - Font Awesome
 
-### Light Theme
+### Light and Dark Theme
 
 ![Screenshot 1](docs/Screenshot1.png)
-
-### Dark Theme
-
 ![Screenshot 2](docs/Screenshot2.png)
 
 # Usage
