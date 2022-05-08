@@ -7,13 +7,12 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'xamarinchatsrWeb' " />
   <ItemGroup>
     <Compile Remove="RestClient\**" />
-    <Compile Remove="wwwroot\**" />
     <Content Remove="RestClient\**" />
-    <Content Remove="wwwroot\**" />
     <EmbeddedResource Remove="RestClient\**" />
-    <EmbeddedResource Remove="wwwroot\**" />
     <None Remove="RestClient\**" />
-    <None Remove="wwwroot\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\css\main.css" />
   </ItemGroup>
 
   <ItemGroup>
