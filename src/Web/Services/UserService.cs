@@ -179,7 +179,19 @@ namespace MobileChat.Web.Services
 
         public Task<bool> AddFriend(User user, User friend)
         {
-            throw new NotImplementedException();
+            try
+            {
+                UserFriend entry = new() { UserId = user.Id, FriendUserId = friend.Id, DateCreated = DateTime.UtcNow };
+                context.UsersFriends.Add(entry);
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return Task.FromResult(false);
+            }
+
+            return Task.FromResult(true);
         }
 
         public Task<bool> RemoveFriend(User user, User friend)

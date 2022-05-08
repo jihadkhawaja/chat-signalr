@@ -7,14 +7,10 @@ namespace MobileChat.Web.Models
     {
         [Key]
         public ulong Id { get; set; }
-        [Key]
+        [Required]
         public ulong UserId { get; set; }
         [Required]
-        public string Username { get; set; }
-        public string Email { get; set; }
-        [Required]
-        public string FriendUsername { get; set; }
-        public string FriendEmail { get; set; }
+        public ulong FriendUserId { get; set; }
         public DateTime DateCreated { get; set; }
     }
 }
