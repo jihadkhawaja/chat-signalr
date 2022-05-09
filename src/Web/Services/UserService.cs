@@ -187,7 +187,11 @@ namespace MobileChat.Web.Services
                 if(context.UsersFriends.SingleOrDefault(x => x.UserId == user.Id && x.FriendUserId == friend.Id) != null)
                     return Task.FromResult(false);
 
-                UserFriend entry = new() { UserId = user.Id, FriendUserId = friend.Id, DateCreated = DateTime.UtcNow };
+                //get friend id from username or email
+                User friendUser = context.Users.SingleOrDefault(x => x.Username == friend.Username || x.Email == friend.Email);
+                if(friendUser == null) return Task.FromResult(false);
+
+                UserFriend entry = new() { UserId = user.Id, FriendUserId = friendUser.Id, DateCreated = DateTime.UtcNow };
                 context.UsersFriends.Add(entry);
                 context.SaveChanges();
             }
@@ -202,7 +206,24 @@ namespace MobileChat.Web.Services
 
         public Task<bool> RemoveFriend(User user, User friend)
         {
-            throw new NotImplementedException();
+            if (user == null || friend == null)
+                return Task.FromResult(false);
+
+            try
+            {
+                UserFriend entry = context.UsersFriends.SingleOrDefault(x => x.UserId == user.Id && x.FriendUserId == friend.Id);
+                if (entry is null)
+                    return Task.FromResult(false);
+
+                context.UsersFriends.Remove(entry);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return Task.FromResult(false);
+            }
+
+            return Task.FromResult(true);
         }
 
         public Task<bool> SendFriendRequest(User user, User friend)
