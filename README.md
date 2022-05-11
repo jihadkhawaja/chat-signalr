@@ -1,4 +1,4 @@
-# Xamarin Chat SignalR Client
+# Xamarin Chat SignalR Mobile Client
 
 ![Xamarin Chat SignalR Icon](docs/icon.png)
 
@@ -14,12 +14,11 @@
 - Tab badges
 - Font Awesome
 
-### Light Theme
+![Xamarin Chat SignalR](docs/ios.png)
+
+### Light and Dark Theme
 
 ![Screenshot 1](docs/Screenshot1.png)
-
-### Dark Theme
-
 ![Screenshot 2](docs/Screenshot2.png)
 
 # Usage
@@ -35,15 +34,16 @@
 
 ### Android
 Phone & Tablets
-9.0 -> 12.0
+9.0 -> 11.0
 ### iOS
 iPhone & iPads
 10.0 -> 14.5
 
 # Future updates
-- Add Friends tab
-- Chatting Rooms
-- Chat Moderation
-- Notifications
-
-![Xamarin Chat SignalR](docs/ios.png)
+- [x] Use a database instead of Json serializations -> [development-server branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-server)
+- [ ] Add Friends tab -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
+- [ ] Chatting Rooms -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
+- [ ] Chat Moderation -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
+- [ ] Notifications -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
+- [ ] Windows Support (MAUI) -> [development-mobile-maui branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-maui)
+- [ ] .NET 6 Support (MAUI & Server) -> [development-mobile-maui branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-maui)
