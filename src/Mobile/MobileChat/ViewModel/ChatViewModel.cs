@@ -147,7 +147,7 @@ namespace MobileChat.ViewModel
             {
                 HubEvents();
 
-                Connect().RunSynchronously();
+                Connect();
             }
         }
 

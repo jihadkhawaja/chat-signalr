@@ -25,7 +25,7 @@ namespace MobileChat
 
         //SignalR Web URL example (http://localhost:2736/chathub) where the chat web app is hosted
         public const string hubName = "chathub";
-        public const string hubConnectionURL = "" + hubName;
+        public const string hubConnectionURL = "https://mobilechat-web.conveyor.cloud/" + hubName;
 
         //follow me and give this repo a star if you liked it <3
         public const string feedback = "https://twitter.com/jihadkhawaja";
