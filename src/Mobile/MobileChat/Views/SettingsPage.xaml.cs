@@ -38,8 +38,6 @@ namespace MobileChat.Views
 
         protected override void OnAppearing()
         {
-            base.OnAppearing();
-
             App.CurrentPage = this.GetType().Name;
 
             RefreshTheme();

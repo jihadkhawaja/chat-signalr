@@ -149,6 +149,12 @@ namespace MobileChat.ViewModel
 
                 Connect();
             }
+            else
+            {
+                IsLoading = true;
+                //alert message invalid hub connection url
+                Application.Current.MainPage.DisplayAlert("Invalid Hub Connection URL", "Please check your hub connection url", "OK");
+            }
         }
 
         private void HubEvents()
@@ -265,16 +271,19 @@ namespace MobileChat.ViewModel
                     {
                         IsConnected = false;
                     }
+
+                    IsLoading = false;
                     break;
                 case HubConnectionState.Connecting:
+                    IsLoading = true;
                     break;
                 case HubConnectionState.Reconnecting:
+                    IsLoading = true;
                     break;
                 default:
+                    IsLoading = true;
                     break;
             }
-
-            IsLoading = false;
         }
         public async Task Disconnect()
         {

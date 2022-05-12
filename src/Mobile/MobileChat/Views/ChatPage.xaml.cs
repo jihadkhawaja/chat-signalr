@@ -24,8 +24,6 @@ namespace MobileChat.Views
 
         protected override void OnAppearing()
         {
-            base.OnAppearing();
-
             App.CurrentPage = this.GetType().Name;
 
             //set theme
@@ -54,8 +52,6 @@ namespace MobileChat.Views
         }
         protected override void OnDisappearing()
         {
-            base.OnDisappearing();
-
             viewModel.Disconnect();
         }
 
