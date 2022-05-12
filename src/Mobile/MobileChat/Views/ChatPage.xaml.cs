@@ -52,6 +52,12 @@ namespace MobileChat.Views
 
             ScrollToEnd(false);
         }
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+            viewModel.Disconnect();
+        }
 
         private void Subscribe()
         {
