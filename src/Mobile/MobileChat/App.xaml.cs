@@ -22,7 +22,7 @@ namespace MobileChat
 
         //SignalR Web URL example (http://localhost:2736/chathub) where the chat web app is hosted
         public const string hubName = "chathub";
-        public const string hubConnectionURL = "http://192.168.0.106:45455/" + hubName;
+        public const string hubConnectionURL = "your ip address here" + hubName;
 
         //follow me and give this repo a star if you liked it <3
         public const string feedback = "https://twitter.com/jihadkhawaja";
