@@ -11,7 +11,7 @@ namespace MobileChat.Helpers
 
             foreach (ResourceDictionary ed in mergedDictionaries)
             {
-                if (ed.TryGetValue(keyName, out var retVal))
+                if (ed.TryGetValue(keyName, out object retVal))
                 {
                     return retVal;
                 }

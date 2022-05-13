@@ -5,7 +5,7 @@ using Android.Runtime;
 
 namespace MobileChat.Droid
 {
-    [Activity(Label = "Xamarin Chat SignalR", Icon = "@mipmap/ic_launcher", Theme = "@style/MainTheme", MainLauncher = true, NoHistory = false,
+    [Activity(Label = App.AppName, Icon = "@mipmap/ic_launcher", Theme = "@style/MainTheme", MainLauncher = true, NoHistory = false,
         ScreenOrientation = ScreenOrientation.Portrait, LaunchMode = LaunchMode.SingleTask, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {

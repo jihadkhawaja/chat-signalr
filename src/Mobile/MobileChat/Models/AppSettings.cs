@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MobileChat.Models
+﻿namespace MobileChat.Models
 {
     public class AppSettings
     {

@@ -2,10 +2,7 @@
 using MobileChat.Interface;
 using MobileChat.Models;
 using MobileChat.Services;
-using MobileChat.ViewModel;
 using MobileChat.Views;
-using System.Globalization;
-using System.Threading;
 using Xamarin.Forms;
 
 namespace MobileChat
@@ -25,7 +22,7 @@ namespace MobileChat
 
         //SignalR Web URL example (http://localhost:2736/chathub) where the chat web app is hosted
         public const string hubName = "chathub";
-        public const string hubConnectionURL = "your address here" + hubName;
+        public const string hubConnectionURL = "http://192.168.0.106:45455/" + hubName;
 
         //follow me and give this repo a star if you liked it <3
         public const string feedback = "https://twitter.com/jihadkhawaja";
@@ -45,6 +42,7 @@ namespace MobileChat
 
             //services
             DependencyService.Register<ISignalR, SignalRService>();
+            DependencyService.Register<IChat, ChatService>();
 
             //MainPage = new NavigationPage(new ChatPage());
             MainPage = new NavigationPage(new FriendsPage());

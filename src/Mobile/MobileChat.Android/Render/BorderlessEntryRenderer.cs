@@ -19,12 +19,12 @@ namespace MobileChat.Droid.Render
         {
             base.OnElementChanged(e);
 
-            if (this.Control != null)
+            if (Control != null)
             {
-                this.Control.SetBackground(null);
+                Control.SetBackground(null);
                 Control.Gravity = GravityFlags.CenterVertical;
                 //Control.SetPadding(0, 10, 0, 30);
-                Control.SetPadding(0,0,0,0);
+                Control.SetPadding(0, 0, 0, 0);
             }
         }
     }

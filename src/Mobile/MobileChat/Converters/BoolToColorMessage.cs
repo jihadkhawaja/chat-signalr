@@ -9,8 +9,12 @@ namespace MobileChat.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is bool)
+            {
                 if ((bool)value)
+                {
                     return Application.Current.Resources["ReceiverColor"];
+                }
+            }
 
             return Application.Current.Resources["SenderColor"];
         }

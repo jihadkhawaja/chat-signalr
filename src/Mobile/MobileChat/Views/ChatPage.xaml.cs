@@ -1,10 +1,10 @@
-﻿using MobileChat.Models;
+﻿using MobileChat.Interface;
+using MobileChat.Models;
 using MobileChat.Themes;
 using MobileChat.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -14,9 +14,11 @@ namespace MobileChat.Views
     public partial class ChatPage : ContentPage
     {
         private ChatViewModel viewModel { get; set; }
-        public ChatPage()
+        public ChatPage(ISignalR signalRService, IChat chatService, Channel channel)
         {
-            BindingContext = viewModel = new ChatViewModel();
+            viewModel = new ChatViewModel(signalRService, chatService, channel);
+            
+            BindingContext = viewModel;
             InitializeComponent();
 
             Subscribe();
@@ -24,7 +26,7 @@ namespace MobileChat.Views
 
         protected override void OnAppearing()
         {
-            App.CurrentPage = this.GetType().Name;
+            App.CurrentPage = GetType().Name;
 
             //set theme
             ICollection<ResourceDictionary> mergedDictionaries = Application.Current.Resources.MergedDictionaries;
@@ -52,7 +54,6 @@ namespace MobileChat.Views
         }
         protected override void OnDisappearing()
         {
-            viewModel.Disconnect();
         }
 
         private void Subscribe()
@@ -65,18 +66,8 @@ namespace MobileChat.Views
 
         private void ScrollToEnd(bool animated = true)
         {
-            var v = ChatList.ItemsSource.Cast<object>().LastOrDefault();
+            object v = ChatList.ItemsSource.Cast<object>().LastOrDefault();
             ChatList.ScrollTo(v, ScrollToPosition.End, animated);
-        }
-
-        /// <summary>
-        /// close fullscreen image
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Button_Clicked(object sender, EventArgs e)
-        {
-            imageShowcaseHolder.IsVisible = false;
         }
 
         private void ChatList_ItemAppearing(object sender, ItemVisibilityEventArgs e)
@@ -95,16 +86,6 @@ namespace MobileChat.Views
             {
                 viewModel.AutoScrollDown = false;
             }
-        }
-
-        /// <summary>
-        /// change User Name
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
-        {
-            //change username
         }
 
         private async void ToolbarItem_Clicked(object sender, EventArgs e)

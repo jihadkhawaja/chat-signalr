@@ -1,11 +1,9 @@
 ﻿using MobileChat.Cache;
-using MobileChat.Interface;
 using MobileChat.Models;
 using MobileChat.Themes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -38,7 +36,7 @@ namespace MobileChat.Views
 
         protected override void OnAppearing()
         {
-            App.CurrentPage = this.GetType().Name;
+            App.CurrentPage = GetType().Name;
 
             RefreshTheme();
         }

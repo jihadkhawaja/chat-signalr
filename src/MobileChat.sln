@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileChat.iOS", "Mobile\Mo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MobileChat", "Mobile\MobileChat\MobileChat.csproj", "{108E7B6B-B928-4C52-8412-96C8E384BEED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileChat.Test", "Mobile\MobileChat.Test\MobileChat.Test.csproj", "{FA746590-7D8C-4273-8DF6-9D4D0B5F42C1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

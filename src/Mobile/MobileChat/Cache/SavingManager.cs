@@ -32,9 +32,13 @@ namespace MobileChat.Cache
             public static bool CheckFileExist(string fileName)
             {
                 if (File.Exists(AppPath + fileName))
+                {
                     return true;
+                }
                 else
+                {
                     return false;
+                }
             }
 
             public static void CreateDirectory(params string[] dirPath)
@@ -42,7 +46,9 @@ namespace MobileChat.Cache
                 foreach (string s in dirPath)
                 {
                     if (!Directory.Exists(AppPath + s))
+                    {
                         Directory.CreateDirectory(AppPath + s);
+                    }
                 }
             }
 
@@ -86,15 +92,21 @@ namespace MobileChat.Cache
                 for (int i = 0; i < a.Length; i++)
                 {
                     if (Char.IsDigit(a[i]))
+                    {
                         b += a[i];
+                    }
                 }
 
                 b = b.Substring(0, 3);
 
                 if (b.Length > 0)
+                {
                     return int.Parse(b);
+                }
                 else
+                {
                     return 756;
+                }
             }
         }
 
@@ -119,7 +131,7 @@ namespace MobileChat.Cache
             {
                 using (Stream stream = File.Open(AppPath + fileName, append ? FileMode.Append : FileMode.Create))
                 {
-                    var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                    System.Runtime.Serialization.Formatters.Binary.BinaryFormatter binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
                     binaryFormatter.Serialize(stream, objectToWrite);
                 }
             }
@@ -134,7 +146,7 @@ namespace MobileChat.Cache
             {
                 using (Stream stream = File.Open(AppPath + fileName, FileMode.Open))
                 {
-                    var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                    System.Runtime.Serialization.Formatters.Binary.BinaryFormatter binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
                     return (T)binaryFormatter.Deserialize(stream);
                 }
             }
@@ -163,14 +175,16 @@ namespace MobileChat.Cache
                 TextWriter writer = null;
                 try
                 {
-                    var serializer = new XmlSerializer(typeof(T));
+                    XmlSerializer serializer = new XmlSerializer(typeof(T));
                     writer = new StreamWriter(AppPath + fileName, append);
                     serializer.Serialize(writer, objectToWrite);
                 }
                 finally
                 {
                     if (writer != null)
+                    {
                         writer.Close();
+                    }
                 }
             }
 
@@ -186,14 +200,16 @@ namespace MobileChat.Cache
                 TextReader reader = null;
                 try
                 {
-                    var serializer = new XmlSerializer(typeof(T));
+                    XmlSerializer serializer = new XmlSerializer(typeof(T));
                     reader = new StreamReader(AppPath + fileName);
                     return (T)serializer.Deserialize(reader);
                 }
                 finally
                 {
                     if (reader != null)
+                    {
                         reader.Close();
+                    }
                 }
             }
         }
@@ -222,17 +238,23 @@ namespace MobileChat.Cache
                 TextWriter writer = null;
                 try
                 {
-                    var contentsToWriteToFile = JsonSerializer.Serialize(objectToWrite);
+                    string contentsToWriteToFile = JsonSerializer.Serialize(objectToWrite);
                     writer = new StreamWriter(AppPath + fileName, append);
                     if (IsEncryptedJSON)
+                    {
                         writer.Write(Cryptography.EncryptDecrypt(contentsToWriteToFile));
+                    }
                     else
+                    {
                         writer.Write(contentsToWriteToFile);
+                    }
                 }
                 finally
                 {
                     if (writer != null)
+                    {
                         writer.Close();
+                    }
                 }
             }
 
@@ -249,16 +271,22 @@ namespace MobileChat.Cache
                 try
                 {
                     reader = new StreamReader(AppPath + fileName);
-                    var fileContents = reader.ReadToEnd();
+                    string fileContents = reader.ReadToEnd();
                     if (IsEncryptedJSON)
+                    {
                         return JsonSerializer.Deserialize<T>(Cryptography.EncryptDecrypt(fileContents));
+                    }
                     else
+                    {
                         return JsonSerializer.Deserialize<T>(fileContents);
+                    }
                 }
                 finally
                 {
                     if (reader != null)
+                    {
                         reader.Close();
+                    }
                 }
             }
         }
