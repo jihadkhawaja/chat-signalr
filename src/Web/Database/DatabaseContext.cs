@@ -10,7 +10,9 @@ namespace MobileChat.Web.Database
         }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Message> Messages { get; set; }
         public DbSet<UserFriend> UsersFriends { get; set; }
+        public DbSet<Channel> Channels { get; set; }
+        public DbSet<ChannelUser> ChannelUsers { get; set; }
+        public DbSet<Message> Messages { get; set; }
     }
 }

@@ -6,7 +6,6 @@ using MobileChat.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MobileChat.Web.Services
@@ -22,7 +21,6 @@ namespace MobileChat.Web.Services
         {
             try
             {
-                entry.DateCreated = DateTime.UtcNow;
                 context.Users.Add(entry);
                 context.SaveChanges();
             }
@@ -35,7 +33,7 @@ namespace MobileChat.Web.Services
             return Task.FromResult(true);
         }
 
-        public Task<User> ReadById(ulong id)
+        public Task<User> ReadById(Guid id)
         {
             return Task.FromResult(context.Users.Single(x => x.Id == id));
         }
@@ -80,7 +78,7 @@ namespace MobileChat.Web.Services
             }
         }
 
-        public Task<bool> Delete(ulong id)
+        public Task<bool> Delete(Guid id)
         {
             try
             {
@@ -107,11 +105,9 @@ namespace MobileChat.Web.Services
         {
             try
             {
-                bool IsEmail = Regex.IsMatch(emailorusername, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase);
-
                 User dbentry;
 
-                if (IsEmail)
+                if (PatternMatchHelper.IsEmail(emailorusername))
                 {
                     dbentry = context.Users.Single(x => x.Email == emailorusername);
 
@@ -137,15 +133,13 @@ namespace MobileChat.Web.Services
 
             return Task.FromResult(false);
         }
-        public Task<bool> LogIn(string emailorusername, string password)
+        public Task<bool> SignIn(string emailorusername, string password)
         {
             try
             {
-                bool IsEmail = Regex.IsMatch(emailorusername, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase);
-
                 User dbentry;
 
-                if (IsEmail)
+                if (PatternMatchHelper.IsEmail(emailorusername))
                 {
                     dbentry = context.Users.Single(x => x.Email == emailorusername);
                 }
@@ -154,10 +148,7 @@ namespace MobileChat.Web.Services
                     dbentry = context.Users.Single(x => x.Username == emailorusername);
                 }
 
-                if (CryptographyHelper.ComparePassword(password, dbentry.Password))
-                {
-                    return Task.FromResult(true);
-                }
+                return Task.FromResult(true);
             }
             catch (Exception e)
             {
@@ -167,7 +158,7 @@ namespace MobileChat.Web.Services
             return Task.FromResult(false);
         }
 
-        public Task<bool> LogOut(string emailorusername)
+        public Task<bool> SignOut(string emailorusername)
         {
             throw new NotImplementedException();
         }
@@ -177,23 +168,63 @@ namespace MobileChat.Web.Services
             throw new NotImplementedException();
         }
 
-        public Task<bool> AddFriend(User user, User friend)
+        public Task<bool> AddFriend(Guid userId, string friendEmailorusername)
         {
-            if(user == null || friend == null)
+            if (string.IsNullOrEmpty(friendEmailorusername))
+            {
                 return Task.FromResult(false);
+            }
 
             try
             {
-                if(context.UsersFriends.SingleOrDefault(x => x.UserId == user.Id && x.FriendUserId == friend.Id) != null)
-                    return Task.FromResult(false);
+                if (PatternMatchHelper.IsEmail(friendEmailorusername))
+                {
+                    //get user id from email
+                    User user = context.Users.SingleOrDefault(x => x.Id == userId);
+                    if (user == null)
+                    {
+                        return Task.FromResult(false);
+                    }
+                    //get friend id from email
+                    User friendUser = context.Users.SingleOrDefault(x => x.Email == friendEmailorusername);
+                    if (friendUser == null)
+                    {
+                        return Task.FromResult(false);
+                    }
 
-                //get friend id from username or email
-                User friendUser = context.Users.SingleOrDefault(x => x.Username == friend.Username || x.Email == friend.Email);
-                if(friendUser == null) return Task.FromResult(false);
+                    if (context.UsersFriends.SingleOrDefault(x => x.UserId == user.Id && x.FriendUserId == friendUser.Id) != null)
+                    {
+                        return Task.FromResult(false);
+                    }
 
-                UserFriend entry = new() { UserId = user.Id, FriendUserId = friendUser.Id, DateCreated = DateTime.UtcNow };
-                context.UsersFriends.Add(entry);
-                context.SaveChanges();
+                    UserFriend entry = new() { UserId = user.Id, FriendUserId = friendUser.Id, DateCreated = DateTime.UtcNow };
+                    context.UsersFriends.Add(entry);
+                    context.SaveChanges();
+                }
+                else
+                {
+                    //get user id from username
+                    User user = context.Users.SingleOrDefault(x => x.Id == userId);
+                    if (user == null)
+                    {
+                        return Task.FromResult(false);
+                    }
+                    //get friend id from username
+                    User friendUser = context.Users.SingleOrDefault(x => x.Username == friendEmailorusername);
+                    if (friendUser == null)
+                    {
+                        return Task.FromResult(false);
+                    }
+
+                    if (context.UsersFriends.SingleOrDefault(x => x.UserId == user.Id && x.FriendUserId == friendUser.Id) != null)
+                    {
+                        return Task.FromResult(false);
+                    }
+
+                    UserFriend entry = new() { UserId = user.Id, FriendUserId = friendUser.Id, DateCreated = DateTime.UtcNow };
+                    context.UsersFriends.Add(entry);
+                    context.SaveChanges();
+                }
             }
             catch (Exception e)
             {
@@ -204,18 +235,61 @@ namespace MobileChat.Web.Services
             return Task.FromResult(true);
         }
 
-        public Task<bool> RemoveFriend(User user, User friend)
+        public Task<bool> RemoveFriend(Guid userId, string friendEmailorusername)
         {
-            if (user == null || friend == null)
+            if (string.IsNullOrEmpty(friendEmailorusername))
+            {
                 return Task.FromResult(false);
+            }
 
             try
             {
-                UserFriend entry = context.UsersFriends.SingleOrDefault(x => x.UserId == user.Id && x.FriendUserId == friend.Id);
-                if (entry is null)
-                    return Task.FromResult(false);
+                if (PatternMatchHelper.IsEmail(friendEmailorusername))
+                {
+                    //get user id from email
+                    User user = context.Users.SingleOrDefault(x => x.Id == userId);
+                    if (user == null)
+                    {
+                        return Task.FromResult(false);
+                    }
+                    //get friend id from email
+                    User friendUser = context.Users.SingleOrDefault(x => x.Email == friendEmailorusername);
+                    if (friendUser == null)
+                    {
+                        return Task.FromResult(false);
+                    }
 
-                context.UsersFriends.Remove(entry);
+                    UserFriend entry = context.UsersFriends.SingleOrDefault(x => x.UserId == user.Id && x.FriendUserId == friendUser.Id);
+                    if (entry is null)
+                    {
+                        return Task.FromResult(false);
+                    }
+
+                    context.UsersFriends.Remove(entry);
+                }
+                else
+                {
+                    //get user id from username
+                    User user = context.Users.SingleOrDefault(x => x.Id == userId);
+                    if (user == null)
+                    {
+                        return Task.FromResult(false);
+                    }
+                    //get friend id from username
+                    User friendUser = context.Users.SingleOrDefault(x => x.Username == friendEmailorusername);
+                    if (friendUser == null)
+                    {
+                        return Task.FromResult(false);
+                    }
+
+                    UserFriend entry = context.UsersFriends.SingleOrDefault(x => x.UserId == user.Id && x.FriendUserId == friendUser.Id);
+                    if (entry is null)
+                    {
+                        return Task.FromResult(false);
+                    }
+
+                    context.UsersFriends.Remove(entry);
+                }
             }
             catch (Exception e)
             {
@@ -226,44 +300,23 @@ namespace MobileChat.Web.Services
             return Task.FromResult(true);
         }
 
-        public Task<bool> SendFriendRequest(User user, User friend)
+        public Task<string> GetDisplayName(Guid userId)
         {
-            throw new NotImplementedException();
-        }
+            try
+            {
+                User user = context.Users.SingleOrDefault(x => x.Id == userId);
+                if (user == null)
+                {
+                    return Task.FromResult(string.Empty);
+                }
 
-        public Task<bool> AcceptFriendRequest(User user, User friend)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> RejectFriendRequest(User user, User friend)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> BlockFriend(User user, User friend)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> UnblockFriend(User user, User friend)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<User>> GetUserFriends(User user)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<User>> GetUserFriendRequests(User user)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<User>> GetUserBlockedFriends(User user)
-        {
-            throw new NotImplementedException();
+                return Task.FromResult(user.DisplayName);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return Task.FromResult(string.Empty);
+            }
         }
     }
 }

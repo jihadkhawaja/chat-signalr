@@ -14,7 +14,9 @@ namespace MobileChat.Web.Models
         }
 
         [Key]
-        public ulong Id { get; set; }
+        public Guid Id { get; set; }
+        [Required]
+        public string ConnectionId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string DisplayName { get; set; }

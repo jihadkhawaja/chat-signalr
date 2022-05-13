@@ -10,9 +10,6 @@ namespace MobileChat.Web.Interfaces
         //crud
         Task<bool> Create(Message entry);
         Task<Message> ReadById(Guid id);
-        Task<HashSet<Message>> ReadAll();
-        Task<HashSet<Message>> ReadAll(ulong userid);
-        Task<HashSet<Message>> ReadAll(ulong userid, ulong userid2);
         Task<bool> Update(Message entry);
         Task<bool> Delete(Guid id);
     }

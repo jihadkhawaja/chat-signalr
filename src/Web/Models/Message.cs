@@ -8,9 +8,9 @@ namespace MobileChat.Web.Models
         [Key]
         public Guid Id { get; set; }
         [Required]
-        public ulong UserId { get; set; }
+        public Guid SenderId { get; set; }
         [Required]
-        public string DisplayName { get; set; }
+        public Guid ChannelId { get; set; }
         public bool Sent { get; set; }
         public DateTime DateSent { get; set; }
         public bool Seen { get; set; }

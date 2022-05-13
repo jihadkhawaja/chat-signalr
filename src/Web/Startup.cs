@@ -77,6 +77,7 @@ namespace MobileChat.Web
             //services
             services.AddScoped<IUser, UserService>();
             services.AddScoped<IMessage, MessageService>();
+            services.AddScoped<IChannel, ChannelService>();
 
             services.AddSignalR();
         }

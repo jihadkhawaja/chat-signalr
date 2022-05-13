@@ -11,11 +11,12 @@ namespace MobileChat.Web
             CreateHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
+        public static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((hostContext, config) =>
                 {
-                    var env = hostContext.HostingEnvironment;
+                    IHostEnvironment env = hostContext.HostingEnvironment;
 
                     config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                         .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
@@ -26,5 +27,6 @@ namespace MobileChat.Web
                     webBuilder.UseUrls("http://localhost:5009");
                     webBuilder.UseStartup<Startup>();
                 });
+        }
     }
 }

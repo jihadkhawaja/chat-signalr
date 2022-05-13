@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR;
+using MobileChat.Web.Helpers;
 using MobileChat.Web.Interfaces;
 using MobileChat.Web.Models;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,125 +12,201 @@ namespace MobileChat.Web.Hubs
 {
     public class ChatHub : Hub
     {
-        private static List<string> GlobalChatConnections = new();
-        public ChatHub(IUser userService, IMessage messageService)
+        public ChatHub(IUser userService, IMessage messageService, IChannel channelService)
         {
             this.userService = userService;
             this.messageService = messageService;
+            this.channelService = channelService;
         }
 
         [Inject]
         private IUser userService { get; set; }
         [Inject]
         private IMessage messageService { get; set; }
+        [Inject]
+        private IChannel channelService { get; set; }
         public override Task OnConnectedAsync()
         {
             return base.OnConnectedAsync();
         }
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            GlobalChatConnections.Remove(Context.ConnectionId);
-
             return base.OnDisconnectedAsync(exception);
         }
-        public async Task SignUp(User user)
+        public async Task<KeyValuePair<Guid, bool>> SignUp(string displayname, string username, string email, string password)
         {
-            if(!await userService.UserExist(user.Username))
-                await userService.Create(user);
-
-            User registeredUser = await userService.ReadByUsername(user.Username);
-            await Clients.Caller.SendAsync("ReceiveAccount", registeredUser);
-        }
-        public async Task SignIn(User user)
-        {
-            if (!await userService.UserExist(user.Username)) return;
-
-            User registeredUser = await userService.ReadByUsername(user.Username);
-            await Clients.Caller.SendAsync("ReceiveAccount", registeredUser);
-        }
-        public async Task ChangePassword(User user, string newpassword)
-        {
-            if (await userService.UserExist(user.Username))
+            if (await userService.UserExist(username))
             {
-                user.Password = newpassword;
-                await userService.Update(user);
-            }   
+                return new KeyValuePair<Guid, bool>(Guid.Empty, false);
+            }
+
+            User user = new User
+            {
+                Id = Guid.NewGuid(),
+                Username = username,
+                Email = email,
+                Password = password,
+                DisplayName = displayname,
+                ConnectionId = Context.ConnectionId,
+                DateCreated = DateTime.UtcNow
+            };
+
+            if (await userService.Create(user))
+            {
+                return new KeyValuePair<Guid, bool>(user.Id, true);
+            }
+
+            return new KeyValuePair<Guid, bool>(Guid.Empty, false);
         }
-        public async Task JoinGlobalChat(string displayName)
+        public async Task<KeyValuePair<Guid, bool>> SignIn(string emailorusername, string password)
         {
-            await Clients.All.SendAsync("JoinGlobalChat", displayName);
+            if (!await userService.UserExist(emailorusername))
+            {
+                return new KeyValuePair<Guid, bool>(Guid.Empty, false);
+            }
 
-            Debug.WriteLine("Connection Id: " + Context.ConnectionId);
-            if(!GlobalChatConnections.Contains(Context.ConnectionId))
-                GlobalChatConnections.Add(Context.ConnectionId);
+            if (!await userService.SignIn(emailorusername, password))
+            {
+                return new KeyValuePair<Guid, bool>(Guid.Empty, false);
+            }
+
+            if (PatternMatchHelper.IsEmail(emailorusername))
+            {
+                User registeredUser = await userService.ReadByEmail(emailorusername);
+                registeredUser.ConnectionId = Context.ConnectionId;
+                await userService.Update(registeredUser);
+
+                return new KeyValuePair<Guid, bool>(registeredUser.Id, true);
+            }
+            else
+            {
+                User registeredUser = await userService.ReadByUsername(emailorusername);
+                registeredUser.ConnectionId = Context.ConnectionId;
+                await userService.Update(registeredUser);
+                
+                return new KeyValuePair<Guid, bool>(registeredUser.Id, true);                
+            }
+        }
+        public async Task<bool> ChangePassword(string emailorusername, string newpassword)
+        {
+            if (await userService.UserExist(emailorusername))
+            {
+                if (PatternMatchHelper.IsEmail(emailorusername))
+                {
+                    User registeredUser = await userService.ReadByEmail(emailorusername);
+                    registeredUser.Password = newpassword;
+                    await userService.Update(registeredUser);
+
+                    return true;
+                }
+                else
+                {
+                    User registeredUser = await userService.ReadByUsername(emailorusername);
+                    registeredUser.Password = newpassword;
+                    await userService.Update(registeredUser);
+                    
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        public async Task<string> GetUserDisplayName(Guid userId)
+        {
+            string displayname = await userService.GetDisplayName(userId);
+            return displayname;
         }
 
-        public async Task LeaveGlobalChat(string displayName)
+        public async Task<Channel> CreateChannel(Guid userId, params string[] usernames)
         {
-            await Clients.All.SendAsync("LeaveGlobalChat", displayName);
+            Channel channel = new Channel
+            {
+                Id = Guid.NewGuid(),
+                DateCreated = DateTime.UtcNow,
+            };
 
-            GlobalChatConnections.Remove(Context.ConnectionId);
+            await channelService.Create(channel);
+            await channelService.AddUsers(userId, channel.Id, usernames);
+
+            return channel;
+        }
+        public async Task<User[]> GetChannelUsers(Guid channelid)
+        {
+            HashSet<User> channelUsers = await channelService.GetUsers(channelid);
+            //only send users ids and display names
+            List<User> users = new List<User>();
+            foreach (User user in channelUsers)
+            {
+                users.Add(new User
+                {
+                    Id = user.Id,
+                    DisplayName = user.DisplayName
+                });
+            }
+            return users.ToArray();
+        }
+        public async Task<Channel[]> GetUserChannels(Guid userid)
+        {
+            HashSet<Channel> userChannels = await channelService.GetUserChannels(userid);
+            return userChannels.ToArray();
         }
 
-        public async Task GlobalChatInfo()
+        public async Task<bool> SendMessage(Message message)
         {
-            await Clients.All.SendAsync("GlobalChatInfo", GlobalChatConnections.Count);
-        }
+            if (message == null)
+            {
+                return false;
+            }
 
-        public async Task SendMessage(Message msg)
-        {
-            msg.DateCreated = DateTime.UtcNow;
+            if (message.SenderId == Guid.Empty)
+            {
+                return false;
+            }
 
-            //send msg to all suers in the global chat room
-            await Clients.All.SendAsync("ReceiveMessage", msg);
+            if (string.IsNullOrEmpty(message.Content) || string.IsNullOrWhiteSpace(message.Content))
+            {
+                return false;
+            }
 
             //save msg to db
-            await messageService.Create(msg);
-        }
-        public async Task ReceiveGlobalMessageHistory()
-        {
-            HashSet<Message> msgs = await messageService.ReadAll();
-            await Clients.Caller.SendAsync("ReceiveGlobalMessageHistory", msgs);
-        }
-        public async Task ReceiveMessageHistory(User user, User user2)
-        {
-            HashSet<Message> msgs = await messageService.ReadAll(user.Id, user2.Id);
-            await Clients.Caller.SendAsync("ReceiveMessageHistory", msgs);
-        }
-        public async Task ReceiveMessageHistoryRange(User user, User user2, int index, int range)
-        {
-            HashSet<Message> msgs = (await messageService.ReadAll(user.Id, user2.Id)).Skip(index).Take(range).ToHashSet();
-            await Clients.Caller.SendAsync("ReceiveMessageHistory", msgs);
-        }
-        public async Task AcceptFriend(User user, User user2)
-        {
-            await userService.AcceptFriendRequest(user, user2);
+            if (await messageService.Create(message))
+            {
+                message.DateSent = DateTime.UtcNow;
 
-            await userService.AddFriend(user, user2);
+                foreach (User user in await channelService.GetUsers(message.ChannelId))
+                {
+                    if (user.Id == message.SenderId)
+                    {
+                        continue;
+                    }
+
+                    await Clients.Client(user.ConnectionId).SendAsync("ReceiveMessage", message);
+                }
+
+                return true;
+            }
+
+            return false;
         }
-        public async Task RemoveFriend(User user, User user2)
+        public async Task<Message[]> ReceiveMessageHistory(Guid channelId)
         {
-            await userService.RemoveFriend(user, user2);
+            HashSet<Message> msgs = await channelService.GetChannelMessages(channelId);
+            return msgs.ToArray();
         }
-        public async Task GetFriends(User user)
+        public async Task<Message[]> ReceiveMessageHistoryRange(Guid channelId, int index, int range)
         {
-            await userService.GetUserFriends(user);
+            HashSet<Message> msgs = (await channelService.GetChannelMessages(channelId)).Skip(index).Take(range).ToHashSet();
+            return msgs.ToArray();
         }
-        public async Task GetFriendRequests(User user)
+        public async Task<bool> AddFriend(Guid userId, string friendEmailorusername)
         {
-            await userService.GetUserFriendRequests(user);
+            if (await userService.AddFriend(userId, friendEmailorusername)) return true;
+            else return false;
         }
-        public async Task BlockUser(User user, User user2)
+        public async Task<bool> RemoveFriend(Guid userId, string friendEmailorusername)
         {
-            await userService.BlockFriend(user, user2);
-        }
-        public async Task UnblockUser(User user, User user2)
-        {
-            await userService.UnblockFriend(user, user2);
-        }
-        public async Task RejectFriendRequest(User user, User user2)
-        {
-            await userService.RejectFriendRequest(user, user2);
+            if (await userService.RemoveFriend(userId, friendEmailorusername)) return true;
+            else return false;
         }
     }
 }
