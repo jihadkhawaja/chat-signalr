@@ -12,6 +12,7 @@ namespace MobileChat.Web.Interfaces
         Task<User> ReadById(Guid id);
         Task<User> ReadByEmail(string email);
         Task<User> ReadByUsername(string username);
+        Task<User> ReadByConnectionId(string connectionid);
         Task<HashSet<User>> ReadAll();
         Task<bool> Update(User user);
         Task<bool> Delete(Guid id);

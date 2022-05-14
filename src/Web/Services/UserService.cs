@@ -318,5 +318,24 @@ namespace MobileChat.Web.Services
                 return Task.FromResult(string.Empty);
             }
         }
+
+        public Task<User> ReadByConnectionId(string connectionid)
+        {
+            try
+            {
+                User user = context.Users.SingleOrDefault(x => x.ConnectionId == connectionid);
+                if (user == null)
+                {
+                    return Task.FromResult<User>(null);
+                }
+
+                return Task.FromResult(user);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return Task.FromResult<User>(null);
+            }
+        }
     }
 }

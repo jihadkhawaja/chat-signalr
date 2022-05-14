@@ -27,10 +27,26 @@ namespace MobileChat.Web.Hubs
         private IChannel channelService { get; set; }
         public override Task OnConnectedAsync()
         {
+            //set user IsOnline true when he connects or reconnects
+            User connectedUser = userService.ReadByConnectionId(Context.ConnectionId).Result;
+            if (connectedUser != null)
+            {
+                connectedUser.IsOnline = true;
+                userService.Update(connectedUser);
+            }
+
             return base.OnConnectedAsync();
         }
         public override Task OnDisconnectedAsync(Exception exception)
         {
+            //set user IsOnline false when he disconnects
+            User connectedUser = userService.ReadByConnectionId(Context.ConnectionId).Result;
+            if (connectedUser != null)
+            {
+                connectedUser.IsOnline = false;
+                userService.Update(connectedUser);
+            }
+
             return base.OnDisconnectedAsync(exception);
         }
         public async Task<KeyValuePair<Guid, bool>> SignUp(string displayname, string username, string email, string password)
@@ -48,7 +64,8 @@ namespace MobileChat.Web.Hubs
                 Password = password,
                 DisplayName = displayname,
                 ConnectionId = Context.ConnectionId,
-                DateCreated = DateTime.UtcNow
+                DateCreated = DateTime.UtcNow,
+                IsOnline = true
             };
 
             if (await userService.Create(user))
@@ -74,6 +91,7 @@ namespace MobileChat.Web.Hubs
             {
                 User registeredUser = await userService.ReadByEmail(emailorusername);
                 registeredUser.ConnectionId = Context.ConnectionId;
+                registeredUser.IsOnline = true;
                 await userService.Update(registeredUser);
 
                 return new KeyValuePair<Guid, bool>(registeredUser.Id, true);
@@ -82,6 +100,7 @@ namespace MobileChat.Web.Hubs
             {
                 User registeredUser = await userService.ReadByUsername(emailorusername);
                 registeredUser.ConnectionId = Context.ConnectionId;
+                registeredUser.IsOnline = true;
                 await userService.Update(registeredUser);
                 
                 return new KeyValuePair<Guid, bool>(registeredUser.Id, true);                
@@ -169,17 +188,42 @@ namespace MobileChat.Web.Hubs
             }
 
             //save msg to db
+            message.Sent = true;
+            message.DateSent = DateTime.UtcNow;
             if (await messageService.Create(message))
             {
-                message.DateSent = DateTime.UtcNow;
-
                 foreach (User user in await channelService.GetUsers(message.ChannelId))
                 {
-                    if (user.Id == message.SenderId)
-                    {
-                        continue;
-                    }
+                    await Clients.Client(user.ConnectionId).SendAsync("ReceiveMessage", message);
+                }
 
+                return true;
+            }
+
+            return false;
+        }
+        public async Task<bool> UpdateMessage(Message message)
+        {
+            if (message == null)
+            {
+                return false;
+            }
+
+            if (message.SenderId == Guid.Empty)
+            {
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(message.Content) || string.IsNullOrWhiteSpace(message.Content))
+            {
+                return false;
+            }
+
+            //save msg to db
+            if (await messageService.Update(message))
+            {
+                foreach (User user in await channelService.GetUsers(message.ChannelId))
+                {
                     await Clients.Client(user.ConnectionId).SendAsync("ReceiveMessage", message);
                 }
 
