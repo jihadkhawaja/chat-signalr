@@ -2,9 +2,6 @@
 
 ![Xamarin Chat SignalR Icon](docs/icon.png)
 
-# Features
-- .Net 6
-
 # Usage
 
 ### Setup
