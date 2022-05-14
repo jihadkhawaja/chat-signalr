@@ -41,9 +41,8 @@ iPhone & iPads
 
 # Future updates
 - [x] Use a database instead of Json serializations -> [development-server branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-server)
-- [x] Add Friends tab -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
-- [ ] Chatting Rooms -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
-- [ ] Chat Moderation -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
+- [x] Add friends tab -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
+- [ ] Chatting rooms -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
+- [ ] Chat moderation -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
 - [ ] Notifications -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
-- [ ] Windows Support (MAUI) -> [development-mobile-maui branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-maui)
-- [ ] .NET 6 Support (MAUI & Server) -> [development-mobile-maui branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-maui)
+- [ ] MAUI -> [development-mobile-maui branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-maui)
