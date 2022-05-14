@@ -97,7 +97,7 @@
                                                     FontFamily="{StaticResource MaterialFontFamilySolid}"
                                                     FontSize="10"
                                                     HorizontalOptions="EndAndExpand"
-                                                    IsVisible="{Binding Sent, Converter={StaticResource NullToBoolConverter}}"
+                                                    IsVisible="{Binding Sent}"
                                                     Text="{x:Static helpers:IconFont.Check}" />
                                             </StackLayout>
                                         </StackLayout>

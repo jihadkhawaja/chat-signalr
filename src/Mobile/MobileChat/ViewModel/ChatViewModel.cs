@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -106,13 +107,22 @@ namespace MobileChat.ViewModel
         {
             signalRService.HubConnection.On<Message>("ReceiveMessage", message =>
             {
-                if (message.SenderId == User.Id) return;
-
-                Messages.Add(message);
-
-                if (AutoScrollDown)
+                if (message.SenderId == User.Id)
                 {
-                    MessagingCenter.Send(this, "ScrollToEnd");
+                    Message msg = Messages.Single(x => x.Id == message.Id);
+                    //update messages
+                    msg = message;
+                }
+                else
+                {
+                    message.Sent = false;
+                    message.Seen = false;
+                    Messages.Add(message);
+
+                    if (AutoScrollDown)
+                    {
+                        MessagingCenter.Send(this, "ScrollToEnd");
+                    }
                 }
             });
         }
@@ -166,7 +176,7 @@ namespace MobileChat.ViewModel
                 
                 if (await chatService.SendMessage(msg))
                 {
-                    msg.Sent = true;
+                    //message sent successfully
                 }
             }
             catch (Exception e)
@@ -190,7 +200,12 @@ namespace MobileChat.ViewModel
                     {
                         msg.IsYourMessage = true;
                     }
-
+                    else
+                    {
+                        msg.Sent = false;
+                        msg.Seen = false;
+                    }
+                    
                     Messages.Add(msg);
                 }
             }
