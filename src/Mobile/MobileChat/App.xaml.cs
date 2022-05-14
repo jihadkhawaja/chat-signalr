@@ -29,23 +29,26 @@ namespace MobileChat
 
         public App()
         {
-            SavingManager.FileManager.CreateDirectory("appsettings", "data");
+            RegisterServices();
 
-            appSettings = new AppSettings();
+            //load settings and user credentials
             try
             {
+                SavingManager.FileManager.CreateDirectory("appsettings", "data");
+                appSettings = new AppSettings();
                 appSettings = SavingManager.JsonSerialization.ReadFromJsonFile<AppSettings>("appsettings/user");
             }
             catch { }
 
             InitializeComponent();
 
-            //services
-            DependencyService.Register<ISignalR, SignalRService>();
-            DependencyService.Register<IChat, ChatService>();
-
             //MainPage = new NavigationPage(new ChatPage());
             MainPage = new NavigationPage(new FriendsPage());
+        }
+        private void RegisterServices()
+        {
+            DependencyService.Register<ISignalR, SignalRService>();
+            DependencyService.Register<IChat, ChatService>();
         }
 
         protected override void OnStart()

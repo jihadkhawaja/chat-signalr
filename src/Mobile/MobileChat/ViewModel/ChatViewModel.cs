@@ -75,12 +75,8 @@ namespace MobileChat.ViewModel
                 OnPropertyChanged();
             }
         }
-
         public bool AutoScrollDown;
-
         public Command SendMessageCommand { get; }
-        public Command ConnectCommand { get; }
-        public Command DisconnectCommand { get; }
 
         public ChatViewModel(ISignalR signalRService, IChat chatService, Channel channel)
         {
@@ -91,8 +87,9 @@ namespace MobileChat.ViewModel
             signalRService.Reconnecting += Reconnecting;
             signalRService.Closed += Closed;
 
-            Messages = new ObservableCollection<Message>();
             SendMessageCommand = new Command(async () => { await SendMessage(InputText, CurrentChannel.Id); });
+
+            Messages = new ObservableCollection<Message>();
 
             //set cached user credentials
             User = App.appSettings.user;
@@ -208,6 +205,8 @@ namespace MobileChat.ViewModel
                     
                     Messages.Add(msg);
                 }
+
+                MessagingCenter.Send(this, "ScrollToEnd");
             }
             catch (Exception e)
             {

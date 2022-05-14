@@ -122,8 +122,6 @@ namespace MobileChat.ViewModel
         public async Task Disconnect()
         {
             await signalRService.Disconnect();
-
-            IsConnected = false;
         }
 
         public async Task AddFriend(Guid userId, string friendEmailorusername)
@@ -163,47 +161,49 @@ namespace MobileChat.ViewModel
                 {
                     App.appSettings.user.Id = result.Key;
                     SavingManager.JsonSerialization.WriteToJsonFile("appsettings/user", App.appSettings);
-                    IsLoading = false;
+                    PopupView = null;
                 }
                 else
                 {
-                    IsLoading = true;
                     App.appSettings.user = null;
                     await Application.Current.MainPage.DisplayAlert("Sign Up Failed", "Please check your credentials", "OK");
-                    await DisplaySignUp();
                 }
-
-                PopupView = null;
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                App.appSettings.user = null;
+                await Application.Current.MainPage.DisplayAlert("Sign Up Failed", "Please check your credentials", "OK");
+            }
         }
 
-        public async Task SignIn(string emailorusername, string password)
+        public async Task SignIn(string username, string password)
         {
             try
             {
-                KeyValuePair<Guid, bool> result = await chatService.SignIn(emailorusername, password);
+                KeyValuePair<Guid, bool> result = await chatService.SignIn(username, password);
                 if (result.Value)
                 {
+                    App.appSettings.user = new User(username, null, password);
                     App.appSettings.user.Id = result.Key;
-                    App.appSettings.user.Username = emailorusername;
                     App.appSettings.user.DisplayName = await chatService.GetUserDisplayName(result.Key);
                     SavingManager.JsonSerialization.WriteToJsonFile("appsettings/user", App.appSettings);
 
                     User = App.appSettings.user;
-                    IsLoading = false;
+                    PopupView = null;
                 }
                 else
                 {
-                    IsLoading = true;
                     App.appSettings.user = null;
                     await Application.Current.MainPage.DisplayAlert("Invalid Credentials", "Please check your credentials", "OK");
-                    await DisplaySignIn();
                 }
-
-                PopupView = null;
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                App.appSettings.user = null;
+                await Application.Current.MainPage.DisplayAlert("Sign In Failed", "Please check your credentials", "OK");
+            }
         }
 
         public Task DisplaySignUp()
