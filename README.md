@@ -33,13 +33,15 @@
 ## Tested Environment
 
 ### Android
-Phone & Tablets
-9.0 -> 11.0
+|Phone & Tablets|
+|:---------------------------|
+|9 -> 11|
 ### iOS
-iPhone & iPads
-10.0 -> 14.5
+|iPhone & iPads|
+|:---------------------------|
+|10 -> 14.5|
 
-# Future updates
+# Incoming updates
 - [x] Use a database instead of Json serializations -> [development-server branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-server)
 - [x] Add friends tab -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
 - [ ] Chatting rooms -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
