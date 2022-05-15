@@ -82,17 +82,6 @@ namespace MobileChat.ViewModel
 
             //set cached user credentials
             User = App.appSettings.user;
-
-            if (signalRService.Initialize(App.hubConnectionURL))
-            {
-                Connect();
-            }
-            else
-            {
-                IsLoading = true;
-                //alert message invalid hub connection url
-                Application.Current.MainPage.DisplayAlert("Invalid Hub Connection URL", "Please check your hub connection url", "OK");
-            }
         }
 
         private Task Reconnecting(Exception arg)
@@ -122,6 +111,20 @@ namespace MobileChat.ViewModel
         public async Task Disconnect()
         {
             await signalRService.Disconnect();
+        }
+
+        public async Task Initialize()
+        {
+            if (signalRService.Initialize(App.hubConnectionURL))
+            {
+                await Connect();
+            }
+            else
+            {
+                IsLoading = true;
+                //alert message invalid hub connection url
+                await Application.Current.MainPage.DisplayAlert("Invalid Hub Connection URL", "Please check your hub connection url", "OK");
+            }
         }
 
         public async Task AddFriend(Guid userId, string friendEmailorusername)

@@ -17,6 +17,12 @@ namespace MobileChat.Views
             InitializeComponent();
         }
 
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            await viewModel.Initialize();
+        }
+
         private void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             Channel channel = e.Item as Channel;
