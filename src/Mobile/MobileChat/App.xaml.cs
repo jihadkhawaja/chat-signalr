@@ -35,21 +35,26 @@ namespace MobileChat
 
         public App()
         {
+            InitializeAppSettings();
+            
             RegisterServices();
-
-            //load settings and user credentials
-            try
-            {
-                SavingManager.FileManager.CreateDirectory("appsettings", "data");
-                appSettings = new AppSettings();
-                appSettings = SavingManager.JsonSerialization.ReadFromJsonFile<AppSettings>("appsettings/user");
-            }
-            catch { }
 
             InitializeComponent();
 
             //MainPage = new NavigationPage(new ChatPage());
             MainPage = new NavigationPage(new FriendsPage());
+        }
+        private void InitializeAppSettings()
+        {
+            //load settings and user credentials
+            try
+            {
+                SavingManager.FileManager.CreateDirectory("appsettings", "data");
+                appSettings = new AppSettings();
+                SavingManager.JsonSerialization.EncryptedJSON = true;
+                appSettings = SavingManager.JsonSerialization.ReadFromJsonFile<AppSettings>("appsettings/user");
+            }
+            catch { }
         }
         private void RegisterServices()
         {

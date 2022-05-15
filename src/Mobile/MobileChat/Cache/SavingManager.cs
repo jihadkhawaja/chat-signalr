@@ -8,8 +8,7 @@ namespace MobileChat.Cache
 {
     public static class SavingManager
     {
-        public static string AppPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal) + @"/appdata/";
-        public static bool IsEncryptedJSON = true;
+        public static string AppPath { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + @"/appdata/";
 
         public static class FileManager
         {
@@ -223,6 +222,8 @@ namespace MobileChat.Cache
         /// </summary>
         public static class JsonSerialization
         {
+            public static bool EncryptedJSON { get; set; }
+
             /// <summary>
             /// Writes the given object instance to a Json file.
             /// <para>Object type must have a parameterless constructor.</para>
@@ -240,7 +241,7 @@ namespace MobileChat.Cache
                 {
                     string contentsToWriteToFile = JsonSerializer.Serialize(objectToWrite);
                     writer = new StreamWriter(AppPath + fileName, append);
-                    if (IsEncryptedJSON)
+                    if (EncryptedJSON)
                     {
                         writer.Write(Cryptography.EncryptDecrypt(contentsToWriteToFile));
                     }
@@ -272,7 +273,7 @@ namespace MobileChat.Cache
                 {
                     reader = new StreamReader(AppPath + fileName);
                     string fileContents = reader.ReadToEnd();
-                    if (IsEncryptedJSON)
+                    if (EncryptedJSON)
                     {
                         return JsonSerializer.Deserialize<T>(Cryptography.EncryptDecrypt(fileContents));
                     }
