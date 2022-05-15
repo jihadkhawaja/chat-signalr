@@ -42,8 +42,8 @@
 |10 -> 14.5|
 
 # Incoming updates
-- [x] Use a database instead of Json serializations -> [development-server branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-server)
-- [x] Add friends tab -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
+- [x] Replace Json serializations with a database -> [development-server branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-server)
+- [x] Friends tab -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
 - [ ] Chatting rooms -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
 - [ ] Chat moderation -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
 - [ ] Notifications -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
