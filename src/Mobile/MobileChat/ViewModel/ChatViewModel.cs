@@ -15,9 +15,6 @@ namespace MobileChat.ViewModel
     {
         public ISignalR signalRService { get; private set; }
         public IChat chatService { get; private set; }
-
-        public Command SendMessageCommand { get; }
-        
         private Channel currentChannel;
         public Channel CurrentChannel
         {
@@ -28,7 +25,6 @@ namespace MobileChat.ViewModel
                 OnPropertyChanged();
             }
         }
-        
         private User user;
         public User User
         {
@@ -39,7 +35,6 @@ namespace MobileChat.ViewModel
                 OnPropertyChanged();
             }
         }
-        
         private string inputText;
         public string InputText
         {
@@ -50,9 +45,6 @@ namespace MobileChat.ViewModel
                 OnPropertyChanged();
             }
         }
-
-        public bool AutoScrollDownEnabled { get; set; }
-
         private ObservableCollection<Message> messages;
         public ObservableCollection<Message> Messages
         {
@@ -63,7 +55,6 @@ namespace MobileChat.ViewModel
                 OnPropertyChanged();
             }
         }
-        
         private bool isLoading;
         public bool IsLoading
         {
@@ -74,7 +65,6 @@ namespace MobileChat.ViewModel
                 OnPropertyChanged();
             }
         }
-        
         private bool isConnected;
         public bool IsConnected
         {
@@ -85,7 +75,8 @@ namespace MobileChat.ViewModel
                 OnPropertyChanged();
             }
         }
-        
+        public bool AutoScrollDown;
+        public Command SendMessageCommand { get; }
 
         public ChatViewModel(ISignalR signalRService, IChat chatService, Channel channel)
         {
@@ -105,8 +96,8 @@ namespace MobileChat.ViewModel
             CurrentChannel = channel;
 
             HubEvents();
-            
-            Task.Factory.StartNew(LoadChannelMessages);
+
+            LoadChannelMessages();
         }
 
         private void HubEvents()
@@ -125,7 +116,7 @@ namespace MobileChat.ViewModel
                     message.Seen = false;
                     Messages.Add(message);
 
-                    if (AutoScrollDownEnabled)
+                    if (AutoScrollDown)
                     {
                         MessagingCenter.Send(this, "ScrollToEnd");
                     }

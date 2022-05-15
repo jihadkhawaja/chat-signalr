@@ -16,7 +16,6 @@ namespace MobileChat.ViewModel
     {
         public ISignalR signalRService { get; private set; }
         public IChat chatService { get; private set; }
-        
         private ObservableCollection<Channel> channels;
         public ObservableCollection<Channel> Channels
         {
@@ -27,11 +26,11 @@ namespace MobileChat.ViewModel
                 OnPropertyChanged();
             }
         }
-        
         private SignUpPopup signUpPopup { get; set; }
         private SignInPopup signInPopup { get; set; }
 
         private View popupView;
+
         public View PopupView
         {
             get => popupView;
@@ -41,7 +40,6 @@ namespace MobileChat.ViewModel
                 OnPropertyChanged();
             }
         }
-        
         private bool isLoading;
         public bool IsLoading
         {
@@ -52,7 +50,6 @@ namespace MobileChat.ViewModel
                 OnPropertyChanged();
             }
         }
-        
         private bool isConnected;
         public bool IsConnected
         {
@@ -63,7 +60,6 @@ namespace MobileChat.ViewModel
                 OnPropertyChanged();
             }
         }
-        
         private User user;
         public User User
         {
