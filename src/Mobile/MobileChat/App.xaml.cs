@@ -20,16 +20,18 @@ namespace MobileChat
         public const string playStoreAppBaseURL = "https://play.google.com/store/apps/details?id=";
         public const string AppName = "Mobile Chat";
 
-        //SignalR Web URL example (http://localhost:2736/chathub) where the chat web app is hosted
+        //SignalR chat hub name (http://your-web-url/hubName)
         public const string hubName = "chathub";
 #if DEBUG
         //development
+        //SignalR Web URL example (http://localhost:2736/) where the chat web app is hosted
         public const string hubConnectionURL = "your address here" + hubName;
 #else
         //production
+        //SignalR Web URL example (https://www.domain.com/) where the chat web app is hosted
         public const string hubConnectionURL = "your address here" + hubName;
 #endif
-        
+
         //follow me and give this repo a star if you liked it <3
         public const string feedback = "https://twitter.com/jihadkhawaja";
 
