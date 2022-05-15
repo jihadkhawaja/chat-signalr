@@ -80,11 +80,11 @@ namespace MobileChat.Views
             if ((Message)e.Item == viewModel.Messages[viewModel.Messages.Count - 1])
             {
                 //Last Item has been hit
-                viewModel.AutoScrollDown = true;
+                viewModel.AutoScrollDownEnabled = true;
             }
             else
             {
-                viewModel.AutoScrollDown = false;
+                viewModel.AutoScrollDownEnabled = false;
             }
         }
 
