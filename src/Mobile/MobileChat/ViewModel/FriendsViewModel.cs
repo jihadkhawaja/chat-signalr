@@ -115,17 +115,21 @@ namespace MobileChat.ViewModel
         public async Task Disconnect()
         {
             await signalRService.Disconnect();
+
+            IsConnected = false;
+            IsLoading = true;            
         }
 
         public async Task Initialize()
         {
+            IsLoading = true;
+
             if (signalRService.Initialize(App.hubConnectionURL))
             {
                 await Connect();
             }
             else
             {
-                IsLoading = true;
                 //alert message invalid hub connection url
                 await Application.Current.MainPage.DisplayAlert("Invalid Hub Connection URL", "Please check your hub connection url", "OK");
             }
@@ -231,47 +235,38 @@ namespace MobileChat.ViewModel
 
         public async Task Connect()
         {
-            if (IsLoading)
+            if (IsConnected)
             {
                 return;
             }
 
-            switch (signalRService.HubConnection.State)
+            if (signalRService.Connect().Wait(15000))
             {
-                case HubConnectionState.Connected:
-                    return;
-                case HubConnectionState.Disconnected:
-                    if (await signalRService.Connect())
+                Debug.WriteLine("Connection ID: " + signalRService.HubConnection.ConnectionId);
+
+                if (User is null)
+                {
+                    await DisplaySignUp();
+                }
+                else
+                {
+                    if (!(await chatService.SignIn(User.Username, User.Password)).Value)
                     {
-                        Debug.WriteLine("Connection ID: " + signalRService.HubConnection.ConnectionId);
-
-                        if (User is null)
-                        {
-                            await DisplaySignUp();
-                        }
-                        else
-                        {
-                            if(!(await chatService.SignIn(User.Username, User.Password)).Value)
-                            {
-                                await DisplaySignIn();
-                            }
-                        }
-
-                        await LoadFriends();
-
-                        IsConnected = true;
+                        await DisplaySignIn();
                     }
-                    else
-                    {
-                        IsConnected = false;
-                    }
-                    break;
-                case HubConnectionState.Connecting:
-                    break;
-                case HubConnectionState.Reconnecting:
-                    break;
-                default:
-                    break;
+                }
+
+                await LoadFriends();
+
+                IsConnected = true;
+                IsLoading = false;
+            }
+            else
+            {
+                IsConnected = false;
+                IsLoading = true;
+                //alert message invalid hub connection url
+                await Application.Current.MainPage.DisplayAlert("Invalid Hub Connection URL", "Please check your hub connection url", "OK");
             }
         }
     }
