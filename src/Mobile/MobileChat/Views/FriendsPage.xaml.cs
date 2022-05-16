@@ -20,7 +20,9 @@ namespace MobileChat.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            Task.Factory.StartNew(viewModel.Initialize);
+
+            if (viewModel.signalRService.HubConnection == null)
+                viewModel.Initialize();
         }
 
         private void ListView_ItemTapped(object sender, ItemTappedEventArgs e)

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -120,7 +121,7 @@ namespace MobileChat.ViewModel
             IsLoading = true;            
         }
 
-        public async Task Initialize()
+        public async void Initialize()
         {
             IsLoading = true;
 
@@ -239,8 +240,10 @@ namespace MobileChat.ViewModel
             {
                 return;
             }
-
-            if (signalRService.Connect().Wait(15000))
+            
+            CancellationTokenSource cts = new CancellationTokenSource();
+            cts.CancelAfter(TimeSpan.FromSeconds(15));
+            if (await signalRService.Connect(cts))
             {
                 Debug.WriteLine("Connection ID: " + signalRService.HubConnection.ConnectionId);
 

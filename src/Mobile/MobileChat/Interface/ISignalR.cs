@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MobileChat.Interface
@@ -7,7 +8,7 @@ namespace MobileChat.Interface
     public interface ISignalR
     {
         bool Initialize(string url);
-        Task<bool> Connect();
+        Task<bool> Connect(CancellationTokenSource cts);
         Task<bool> Disconnect();
         HubConnection HubConnection { get; }
         event Func<Exception, Task> Reconnecting;

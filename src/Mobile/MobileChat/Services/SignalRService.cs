@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using MobileChat.Interface;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MobileChat.Services
@@ -64,13 +65,28 @@ namespace MobileChat.Services
             return Task.CompletedTask;
         }
 
-        public async Task<bool> Connect()
+        public async Task<bool> Connect(CancellationTokenSource cts)
         {
             try
             {
-                await HubConnection.StartAsync();
+                await HubConnection.StartAsync(cts.Token);
 
-                return true;
+                //return true on success and false if cancelled
+                if (cts.IsCancellationRequested)
+                {
+                    return false;
+                }
+                else
+                {
+                    if (HubConnection.State == HubConnectionState.Connected)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
             }
             catch { }
 
