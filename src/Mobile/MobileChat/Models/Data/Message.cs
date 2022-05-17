@@ -1,8 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
-namespace MobileChat.Models
+namespace MobileChat.Models.Data
 {
     public class Message
     {
@@ -21,8 +20,5 @@ namespace MobileChat.Models
         [Required]
         public string Content { get; set; }
         public DateTime DateCreated { get; set; }
-
-        [JsonIgnore]
-        public bool IsYourMessage { get; set; }
     }
 }

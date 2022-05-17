@@ -1,5 +1,7 @@
 ﻿using MobileChat.Interface;
-using MobileChat.Models;
+using MobileChat.Models.CachedData;
+using MobileChat.Models.Data;
+using MobileChat.Models.ViewData;
 using MobileChat.Themes;
 using MobileChat.ViewModel;
 using System;
@@ -77,7 +79,7 @@ namespace MobileChat.Views
             //    //First Item has been hit
             //}
 
-            if ((Message)e.Item == viewModel.Messages[viewModel.Messages.Count - 1])
+            if ((ViewMessage)e.Item == viewModel.Messages[viewModel.Messages.Count - 1])
             {
                 //Last Item has been hit
                 viewModel.AutoScrollDownEnabled = true;

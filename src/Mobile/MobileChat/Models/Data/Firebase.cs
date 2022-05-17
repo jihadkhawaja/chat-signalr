@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MobileChat.Models
+namespace MobileChat.Models.Data
 {
     public class Firebase
     {

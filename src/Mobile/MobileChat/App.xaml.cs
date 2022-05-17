@@ -1,6 +1,6 @@
 ﻿using MobileChat.Cache;
 using MobileChat.Interface;
-using MobileChat.Models;
+using MobileChat.Models.CachedData;
 using MobileChat.Services;
 using MobileChat.Views;
 using Xamarin.Forms;

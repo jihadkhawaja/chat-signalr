@@ -1,4 +1,5 @@
-﻿using MobileChat.Models;
+﻿using MobileChat.Models.Data;
+using MobileChat.Models.ViewData;
 using MobileChat.ViewModel;
 using System;
 using System.Threading.Tasks;
@@ -29,9 +30,9 @@ namespace MobileChat.Views
         {
             if (!viewModel.IsConnected) return;
 
-            Channel channel = e.Item as Channel;
+            ViewChannel viewChannel = e.Item as ViewChannel;
 
-            Navigation.PushAsync(new ChatPage(viewModel.signalRService, viewModel.chatService, channel));
+            Navigation.PushAsync(new ChatPage(viewModel.signalRService, viewModel.chatService, viewChannel.Channel));
         }
 
         private async void AddUserButton(object sender, EventArgs e)

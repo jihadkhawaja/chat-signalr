@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using MobileChat.Interface;
-using MobileChat.Models;
+using MobileChat.Models.Data;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

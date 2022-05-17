@@ -1,5 +1,5 @@
 ﻿using MobileChat.Cache;
-using MobileChat.Models;
+using MobileChat.Models.CachedData;
 using MobileChat.Themes;
 using System;
 using System.Collections.Generic;

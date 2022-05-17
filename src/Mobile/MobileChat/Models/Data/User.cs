@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace MobileChat.Models
+namespace MobileChat.Models.Data
 {
     public class User
     {

@@ -38,7 +38,7 @@
                                     FontSize="Large"
                                     Text="{x:Static helpers:IconFont.User}"
                                     TextColor="{DynamicResource PrimaryTextColor}" />
-                                <Label Text="{Binding Id}" TextColor="{DynamicResource PrimaryTextColor}" />
+                                <Label Text="{Binding Name}" TextColor="{DynamicResource PrimaryTextColor}" />
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>

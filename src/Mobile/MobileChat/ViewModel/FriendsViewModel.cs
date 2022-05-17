@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using MobileChat.Cache;
 using MobileChat.Interface;
-using MobileChat.Models;
+using MobileChat.Models.Data;
+using MobileChat.Models.ViewData;
 using MobileChat.Views;
 using System;
 using System.Collections.Generic;
@@ -18,8 +19,8 @@ namespace MobileChat.ViewModel
         public ISignalR signalRService { get; private set; }
         public IChat chatService { get; private set; }
         
-        private ObservableCollection<Channel> channels;
-        public ObservableCollection<Channel> Channels
+        private ObservableCollection<ViewChannel> channels;
+        public ObservableCollection<ViewChannel> Channels
         {
             get => channels;
             set
@@ -85,6 +86,8 @@ namespace MobileChat.ViewModel
             signalRService.Reconnecting += Reconnecting;
             signalRService.Closed += Closed;
 
+            Channels = new ObservableCollection<ViewChannel>();
+
             //set cached user credentials
             User = App.appSettings.user;
         }
@@ -123,6 +126,7 @@ namespace MobileChat.ViewModel
 
         public async void Initialize()
         {
+            Channels = new ObservableCollection<ViewChannel>();
             IsLoading = true;
 
             if (signalRService.Initialize(App.hubConnectionURL))
@@ -158,7 +162,31 @@ namespace MobileChat.ViewModel
         public async Task LoadFriends()
         {
             Channel[] channels = await chatService.GetUserChannels(User.Id);
-            Channels = new ObservableCollection<Channel>(channels);
+            ViewChannel[] viewChannels = new ViewChannel[channels.Length];
+
+            for (int i = 0; i < channels.Length; i++)
+            {
+                viewChannels[i] = new ViewChannel();
+                viewChannels[i].Channel = channels[i];
+                User[] friends = await chatService.GetChannelUsers(viewChannels[i].Channel.Id);
+                foreach (User friend in friends)
+                {
+                    viewChannels[i].Name += ", ";
+
+                    if (friend.Id == User.Id)
+                    {
+                        viewChannels[i].Name = viewChannels[i].Name.Insert(0, "You");
+                    }
+                    else
+                    {
+                        viewChannels[i].Name += await chatService.GetUserDisplayName(friend.Id);
+                    }
+                }
+
+                viewChannels[i].Name = viewChannels[i].Name.TrimEnd(',', ' ');
+
+                Channels.Add(viewChannels[i]);
+            }
         }
 
         public async Task SignUp(string displayname, string username, string email, string password)

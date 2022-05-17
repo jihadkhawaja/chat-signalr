@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using MobileChat.Interface;
-using MobileChat.Models;
+using MobileChat.Models.Data;
+using MobileChat.Models.ViewData;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -53,8 +54,8 @@ namespace MobileChat.ViewModel
 
         public bool AutoScrollDownEnabled { get; set; }
 
-        private ObservableCollection<Message> messages;
-        public ObservableCollection<Message> Messages
+        private ObservableCollection<ViewMessage> messages;
+        public ObservableCollection<ViewMessage> Messages
         {
             get => messages;
             set
@@ -98,7 +99,7 @@ namespace MobileChat.ViewModel
 
             SendMessageCommand = new Command(async () => { await SendMessage(InputText, CurrentChannel.Id); });
 
-            Messages = new ObservableCollection<Message>();
+            Messages = new ObservableCollection<ViewMessage>();
 
             //set cached user credentials
             User = App.appSettings.user;
@@ -115,15 +116,23 @@ namespace MobileChat.ViewModel
             {
                 if (message.SenderId == User.Id)
                 {
-                    Message msg = Messages.Single(x => x.Id == message.Id);
+                    ViewMessage viewMessage = Messages.Single(x => x.Message.Id == message.Id);
                     //update messages
-                    msg = message;
+                    viewMessage.IsYourMessage = true;
+                    viewMessage.Message = message;
                 }
                 else
                 {
                     message.Sent = false;
                     message.Seen = false;
-                    Messages.Add(message);
+
+                    ViewMessage viewMessage = new ViewMessage()
+                    {
+                        Message = message,
+                        IsYourMessage = false
+                    };
+
+                    Messages.Add(viewMessage);
 
                     if (AutoScrollDownEnabled)
                     {
@@ -174,9 +183,13 @@ namespace MobileChat.ViewModel
                     DateCreated = DateTime.UtcNow,
                     Sent = false,
                     Seen = false,
-                    IsYourMessage = true
                 };
-                Messages.Add(msg);
+                ViewMessage viewMessage = new ViewMessage
+                {
+                    Message = msg,
+                    IsYourMessage = true,
+                };
+                Messages.Add(viewMessage);
 
                 MessagingCenter.Send(this, "ScrollToEnd");
                 
@@ -195,24 +208,29 @@ namespace MobileChat.ViewModel
         private async Task LoadChannelMessages()
         {
             IsLoading = true;
-
+            
             try
             {
                 Message[] messages = await chatService.ReceiveMessageHistory(CurrentChannel.Id);
-
-                foreach (Message msg in messages)
+                ViewMessage[] viewMessages = new ViewMessage[messages.Length];
+                
+                for (int i = 0; i < messages.Length; i++)
                 {
-                    if (msg.SenderId == User.Id)
+                    viewMessages[i] = new ViewMessage();
+                    viewMessages[i].Message = messages[i];
+                    if (viewMessages[i].Message.SenderId == User.Id)
                     {
-                        msg.IsYourMessage = true;
+                        viewMessages[i].Message.DisplayName = User.DisplayName;
+                        viewMessages[i].IsYourMessage = true;
                     }
                     else
                     {
-                        msg.Sent = false;
-                        msg.Seen = false;
+                        viewMessages[i].Message.DisplayName = await chatService.GetUserDisplayName(messages[i].SenderId);
+                        viewMessages[i].Message.Sent = false;
+                        viewMessages[i].Message.Seen = false;
                     }
                     
-                    Messages.Add(msg);
+                    Messages.Add(viewMessages[i]);
                 }
 
                 MessagingCenter.Send(this, "ScrollToEnd");

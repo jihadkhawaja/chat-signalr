@@ -1,4 +1,6 @@
-﻿namespace MobileChat.Models
+﻿using MobileChat.Models.Data;
+
+namespace MobileChat.Models.CachedData
 {
     public class AppSettings
     {

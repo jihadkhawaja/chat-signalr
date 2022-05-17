@@ -76,13 +76,13 @@
                                                 FontAttributes="None"
                                                 FontSize="10"
                                                 HorizontalOptions="Start"
-                                                Text="{Binding SenderId}"
+                                                Text="{Binding Message.DisplayName}"
                                                 TextColor="{Binding IsYourMessage, Converter={StaticResource BoolToColorMessageText}}" />
 
                                             <Label
                                                 FontAttributes="Bold"
-                                                IsVisible="{Binding Content, Converter={StaticResource NullToBoolConverter}}"
-                                                Text="{Binding Content}"
+                                                IsVisible="{Binding Message.Content, Converter={StaticResource NullToBoolConverter}}"
+                                                Text="{Binding Message.Content}"
                                                 TextColor="{Binding IsYourMessage, Converter={StaticResource BoolToColorMessageText}}" />
 
                                             <StackLayout Orientation="Horizontal">
@@ -90,14 +90,14 @@
                                                     FontAttributes="Italic"
                                                     FontSize="10"
                                                     HorizontalOptions="Start"
-                                                    Text="{Binding DateCreated}"
+                                                    Text="{Binding Message.DateCreated}"
                                                     TextColor="{Binding IsYourMessage, Converter={StaticResource BoolToColorMessageText}}" />
 
                                                 <Label
                                                     FontFamily="{StaticResource MaterialFontFamilySolid}"
                                                     FontSize="10"
                                                     HorizontalOptions="EndAndExpand"
-                                                    IsVisible="{Binding Sent}"
+                                                    IsVisible="{Binding Message.Sent}"
                                                     Text="{x:Static helpers:IconFont.Check}" />
                                             </StackLayout>
                                         </StackLayout>
