@@ -11,8 +11,8 @@ namespace MobileChat.Web.Services
 {
     public class ChannelService : IChannel
     {
-        private readonly DatabaseContext context;
-        public ChannelService(DatabaseContext context)
+        private readonly DataContext context;
+        public ChannelService(DataContext context)
         {
             this.context = context;
         }

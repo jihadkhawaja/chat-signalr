@@ -11,8 +11,8 @@ namespace MobileChat.Web.Services
 {
     public class MessageService : IMessage
     {
-        private readonly DatabaseContext context;
-        public MessageService(DatabaseContext context)
+        private readonly DataContext context;
+        public MessageService(DataContext context)
         {
             this.context = context;
         }

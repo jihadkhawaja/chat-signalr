@@ -12,8 +12,8 @@ namespace MobileChat.Web.Services
 {
     public class UserService : IUser
     {
-        private readonly DatabaseContext context;
-        public UserService(DatabaseContext context)
+        private readonly DataContext context;
+        public UserService(DataContext context)
         {
             this.context = context;
         }

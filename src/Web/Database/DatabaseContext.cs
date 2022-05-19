@@ -3,10 +3,22 @@ using MobileChat.Web.Models;
 
 namespace MobileChat.Web.Database
 {
-    public class DatabaseContext : DbContext
+    public class DataContext : DbContext
     {
-        public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
+        protected readonly IConfiguration Configuration;
+
+        public DataContext(IConfiguration configuration)
         {
+            Configuration = configuration;
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+#if DEBUG
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+#else
+            options.UseSqlServer(Configuration.GetConnectionString("ProductionConnection"));
+#endif
         }
 
         public DbSet<User> Users { get; set; }

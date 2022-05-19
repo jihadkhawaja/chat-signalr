@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+	<Nullable>disable</Nullable>
+	<ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'xamarinchatsrWeb' " />
@@ -30,5 +32,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.3.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.3.1" />
   </ItemGroup>
 </Project>
