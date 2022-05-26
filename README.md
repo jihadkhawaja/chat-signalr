@@ -42,6 +42,7 @@
 |10 -> 14.5|
 
 # Incoming updates
+- [x] Code Refactoring -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
 - [x] Replace Json serializations with a database -> [development-server branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-server)
 - [x] Friends tab -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
 - [ ] Chatting rooms -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
