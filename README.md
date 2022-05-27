@@ -47,5 +47,6 @@
 - [x] Friends tab -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
 - [ ] Chatting rooms -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
 - [ ] Chat moderation -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
+- [ ] Bluetooth nearby chat -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
 - [ ] Notifications -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
 - [ ] MAUI -> [development-mobile-maui branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-maui)
