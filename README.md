@@ -50,3 +50,12 @@
 - [ ] Bluetooth nearby chat -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
 - [ ] Notifications -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
 - [ ] MAUI -> [development-mobile-maui branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-maui)
+
+---
+
+<div>
+    <a href="https://www.jetbrains.com/" align="right"><img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg" alt="JetBrains" class="logo-footer" width="72" align="left">
+    <a><br/>
+        
+Special thanks to [JetBrains](https://jb.gg/OpenSourceSupport) for supporting us with open-source licenses for their IDEs. </a>
+</div>
