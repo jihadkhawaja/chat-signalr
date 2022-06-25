@@ -14,25 +14,25 @@ namespace MobileChat.Web.Hubs
     {
         public ChatHub(IUser userService, IMessage messageService, IChannel channelService)
         {
-            this.userService = userService;
-            this.messageService = messageService;
-            this.channelService = channelService;
+            this.UserService = userService;
+            this.MessageService = messageService;
+            this.ChannelService = channelService;
         }
 
         [Inject]
-        private IUser userService { get; set; }
+        private IUser UserService { get; set; }
         [Inject]
-        private IMessage messageService { get; set; }
+        private IMessage MessageService { get; set; }
         [Inject]
-        private IChannel channelService { get; set; }
+        private IChannel ChannelService { get; set; }
         public override Task OnConnectedAsync()
         {
             //set user IsOnline true when he connects or reconnects
-            User connectedUser = userService.ReadByConnectionId(Context.ConnectionId).Result;
+            User connectedUser = UserService.ReadByConnectionId(Context.ConnectionId).Result;
             if (connectedUser != null)
             {
                 connectedUser.IsOnline = true;
-                userService.Update(connectedUser);
+                UserService.Update(connectedUser);
             }
 
             return base.OnConnectedAsync();
@@ -40,23 +40,23 @@ namespace MobileChat.Web.Hubs
         public override Task OnDisconnectedAsync(Exception exception)
         {
             //set user IsOnline false when he disconnects
-            User connectedUser = userService.ReadByConnectionId(Context.ConnectionId).Result;
+            User connectedUser = UserService.ReadByConnectionId(Context.ConnectionId).Result;
             if (connectedUser != null)
             {
                 connectedUser.IsOnline = false;
-                userService.Update(connectedUser);
+                UserService.Update(connectedUser);
             }
 
             return base.OnDisconnectedAsync(exception);
         }
         public async Task<KeyValuePair<Guid, bool>> SignUp(string displayname, string username, string email, string password)
         {
-            if (await userService.UserExist(username))
+            if (await UserService.UserExist(username))
             {
                 return new KeyValuePair<Guid, bool>(Guid.Empty, false);
             }
 
-            User user = new User
+            User user = new()
             {
                 Id = Guid.NewGuid(),
                 Username = username,
@@ -68,7 +68,7 @@ namespace MobileChat.Web.Hubs
                 IsOnline = true
             };
 
-            if (await userService.Create(user))
+            if (await UserService.Create(user))
             {
                 return new KeyValuePair<Guid, bool>(user.Id, true);
             }
@@ -77,52 +77,52 @@ namespace MobileChat.Web.Hubs
         }
         public async Task<KeyValuePair<Guid, bool>> SignIn(string emailorusername, string password)
         {
-            if (!await userService.UserExist(emailorusername))
+            if (!await UserService.UserExist(emailorusername))
             {
                 return new KeyValuePair<Guid, bool>(Guid.Empty, false);
             }
 
-            if (!await userService.SignIn(emailorusername, password))
+            if (!await UserService.SignIn(emailorusername, password))
             {
                 return new KeyValuePair<Guid, bool>(Guid.Empty, false);
             }
 
             if (PatternMatchHelper.IsEmail(emailorusername))
             {
-                User registeredUser = await userService.ReadByEmail(emailorusername);
+                User registeredUser = await UserService.ReadByEmail(emailorusername);
                 registeredUser.ConnectionId = Context.ConnectionId;
                 registeredUser.IsOnline = true;
-                await userService.Update(registeredUser);
+                await UserService.Update(registeredUser);
 
                 return new KeyValuePair<Guid, bool>(registeredUser.Id, true);
             }
             else
             {
-                User registeredUser = await userService.ReadByUsername(emailorusername);
+                User registeredUser = await UserService.ReadByUsername(emailorusername);
                 registeredUser.ConnectionId = Context.ConnectionId;
                 registeredUser.IsOnline = true;
-                await userService.Update(registeredUser);
+                await UserService.Update(registeredUser);
                 
                 return new KeyValuePair<Guid, bool>(registeredUser.Id, true);                
             }
         }
         public async Task<bool> ChangePassword(string emailorusername, string newpassword)
         {
-            if (await userService.UserExist(emailorusername))
+            if (await UserService.UserExist(emailorusername))
             {
                 if (PatternMatchHelper.IsEmail(emailorusername))
                 {
-                    User registeredUser = await userService.ReadByEmail(emailorusername);
+                    User registeredUser = await UserService.ReadByEmail(emailorusername);
                     registeredUser.Password = newpassword;
-                    await userService.Update(registeredUser);
+                    await UserService.Update(registeredUser);
 
                     return true;
                 }
                 else
                 {
-                    User registeredUser = await userService.ReadByUsername(emailorusername);
+                    User registeredUser = await UserService.ReadByUsername(emailorusername);
                     registeredUser.Password = newpassword;
-                    await userService.Update(registeredUser);
+                    await UserService.Update(registeredUser);
                     
                     return true;
                 }
@@ -132,28 +132,28 @@ namespace MobileChat.Web.Hubs
         }
         public async Task<string> GetUserDisplayName(Guid userId)
         {
-            string displayname = await userService.GetDisplayName(userId);
+            string displayname = await UserService.GetDisplayName(userId);
             return displayname;
         }
 
         public async Task<Channel> CreateChannel(Guid userId, params string[] usernames)
         {
-            Channel channel = new Channel
+            Channel channel = new()
             {
                 Id = Guid.NewGuid(),
                 DateCreated = DateTime.UtcNow,
             };
 
-            await channelService.Create(channel);
-            await channelService.AddUsers(userId, channel.Id, usernames);
+            await ChannelService.Create(channel);
+            await ChannelService.AddUsers(userId, channel.Id, usernames);
 
             return channel;
         }
         public async Task<User[]> GetChannelUsers(Guid channelid)
         {
-            HashSet<User> channelUsers = await channelService.GetUsers(channelid);
+            HashSet<User> channelUsers = await ChannelService.GetUsers(channelid);
             //only send users ids and display names
-            List<User> users = new List<User>();
+            List<User> users = new();
             foreach (User user in channelUsers)
             {
                 users.Add(new User
@@ -166,7 +166,7 @@ namespace MobileChat.Web.Hubs
         }
         public async Task<Channel[]> GetUserChannels(Guid userid)
         {
-            HashSet<Channel> userChannels = await channelService.GetUserChannels(userid);
+            HashSet<Channel> userChannels = await ChannelService.GetUserChannels(userid);
             return userChannels.ToArray();
         }
 
@@ -190,9 +190,9 @@ namespace MobileChat.Web.Hubs
             //save msg to db
             message.Sent = true;
             message.DateSent = DateTime.UtcNow;
-            if (await messageService.Create(message))
+            if (await MessageService.Create(message))
             {
-                foreach (User user in await channelService.GetUsers(message.ChannelId))
+                foreach (User user in await ChannelService.GetUsers(message.ChannelId))
                 {
                     await Clients.Client(user.ConnectionId).SendAsync("ReceiveMessage", message);
                 }
@@ -220,9 +220,9 @@ namespace MobileChat.Web.Hubs
             }
 
             //save msg to db
-            if (await messageService.Update(message))
+            if (await MessageService.Update(message))
             {
-                foreach (User user in await channelService.GetUsers(message.ChannelId))
+                foreach (User user in await ChannelService.GetUsers(message.ChannelId))
                 {
                     await Clients.Client(user.ConnectionId).SendAsync("ReceiveMessage", message);
                 }
@@ -234,22 +234,22 @@ namespace MobileChat.Web.Hubs
         }
         public async Task<Message[]> ReceiveMessageHistory(Guid channelId)
         {
-            HashSet<Message> msgs = await channelService.GetChannelMessages(channelId);
+            HashSet<Message> msgs = await ChannelService.GetChannelMessages(channelId);
             return msgs.ToArray();
         }
         public async Task<Message[]> ReceiveMessageHistoryRange(Guid channelId, int index, int range)
         {
-            HashSet<Message> msgs = (await channelService.GetChannelMessages(channelId)).Skip(index).Take(range).ToHashSet();
+            HashSet<Message> msgs = (await ChannelService.GetChannelMessages(channelId)).Skip(index).Take(range).ToHashSet();
             return msgs.ToArray();
         }
         public async Task<bool> AddFriend(Guid userId, string friendEmailorusername)
         {
-            if (await userService.AddFriend(userId, friendEmailorusername)) return true;
+            if (await UserService.AddFriend(userId, friendEmailorusername)) return true;
             else return false;
         }
         public async Task<bool> RemoveFriend(Guid userId, string friendEmailorusername)
         {
-            if (await userService.RemoveFriend(userId, friendEmailorusername)) return true;
+            if (await UserService.RemoveFriend(userId, friendEmailorusername)) return true;
             else return false;
         }
     }
