@@ -631,7 +631,7 @@
         public const string Divide = "\uf529";
         public const string DoorClosed = "\uf52a";
         public const string DoorOpen = "\uf52b";
-        public const string Equals = "\uf52c";
+        public const string EqualsSymbol = "\uf52c";
         public const string Feather = "\uf52d";
         public const string Frog = "\uf52e";
         public const string GasPump = "\uf52f";
