@@ -336,3 +336,4 @@ ASALocalRun/
 # Local History for Visual Studio
 .localhistory/
 src/Web/appsecrets.json
+src/MobileChat.Server/appsecrets.json
