@@ -49,7 +49,8 @@
 - [ ] Chat moderation -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
 - [ ] Bluetooth nearby chat -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
 - [ ] Notifications -> [development-mobile-xamarin branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-xamarin)
-- [ ] MAUI -> [development-mobile-maui branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-mobile-maui)
+- [ ] MAUI -> [development-mobile-maui branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-maui)
+- [ ] NuGet Package -> [development-mobile-maui branch](https://github.com/jihadkhawaja/xamarin-chat-signalr/tree/development-maui)
 
 ---
 
