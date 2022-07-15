@@ -30,6 +30,8 @@
 
 [Youtube Tutorial](https://youtu.be/XJHMjS201nw) (5 min)
 
+Join the [Discord server](https://discord.gg/9KMAM2RKVC) to get updates, ask questions or send a feedback.
+
 ## Tested Environment
 
 ### Android
